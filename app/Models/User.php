@@ -2,26 +2,31 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'users';
 
     protected $fillable = [
+        'role_id',
+        'login',
+        'password',
         'name',
-        'email',
-        'password',
+        'bitrix_link',
+        'subscribe_end',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password'];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $casts = ["last_online_at" => "datetime"];
+
+    public function role() {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 }

@@ -15,11 +15,14 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->string('login')->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('name');
+            $table->string('bitrix_link')->nullable();
+            $table->timestamp('subscribe_end')->nullable();
+            $table->timestamp("last_online_at")->useCurrent();
             $table->timestamps();
         });
     }
