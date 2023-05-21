@@ -22,7 +22,15 @@ Route::prefix('/user')->group(function () {
     Route::post('/login', [\App\Http\Controllers\UserController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::middleware('abilities:manager')->post('/register', [\App\Http\Controllers\UserController::class, 'register']);
+        Route::middleware('abilities:manager')->group(function () {
+            Route::post('/store', [\App\Http\Controllers\UserController::class, 'store']);
+
+            Route::get('/', [\App\Http\Controllers\UserController::class, 'index']);
+            Route::get('/show', [\App\Http\Controllers\UserController::class, 'show']);
+            Route::post('/update', [\App\Http\Controllers\UserController::class, 'update']);
+            Route::delete('/destroy', [\App\Http\Controllers\UserController::class, 'destroy']);
+        });
+
         Route::get('/logout', [\App\Http\Controllers\UserController::class, 'logout']);
     });
 });

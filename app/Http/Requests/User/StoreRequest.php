@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,8 @@ class RegisterRequest extends FormRequest
             'login' => ['required', 'string', 'min:1', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:1', 'max:255'],
             'bitrix_link' => ['required', 'string', 'min:1', 'max:255'],
-            'name' => ['required', 'string', 'min:1', 'max:255']
+            'name' => ['required', 'string', 'min:1', 'max:255'],
+            'subscribe_end' => ['nullable', 'string', 'min:1', 'max:255'],
         ];
     }
 }
