@@ -20,7 +20,13 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'manager_id' => rand(1, 4),
+            'role_id' => 1,
+            'name' => $this->faker->name(),
+            'login' => $this->faker->unique()->safeEmail(),
+            'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
+            'bitrix_link' => $this->faker->url(),
+            'subscribe_end' => rand(0, 1) ? $this->faker->dateTime() : null
         ];
     }
 }
