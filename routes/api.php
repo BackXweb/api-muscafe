@@ -25,3 +25,13 @@ Route::prefix('/user')->group(function () {
         Route::delete('/destroy', [\App\Http\Controllers\UserController::class, 'destroy']);
     });
 });
+
+Route::prefix('/manager')->group(function () {
+    Route::middleware(['auth:sanctum', 'abilities:manager'])->group(function () {
+        Route::post('/store', [\App\Http\Controllers\ManagerController::class, 'store']);
+        Route::get('/', [\App\Http\Controllers\ManagerController::class, 'index']);
+        Route::get('/show', [\App\Http\Controllers\ManagerController::class, 'show']);
+        Route::post('/update', [\App\Http\Controllers\ManagerController::class, 'update']);
+        Route::delete('/destroy', [\App\Http\Controllers\ManagerController::class, 'destroy']);
+    });
+});
