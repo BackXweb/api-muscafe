@@ -22,6 +22,7 @@ class UserController extends Controller
         $user = User::where('login', $validated['login'])->with('role')->first();
 
         if ($user && Hash::check($validated['password'], $user->password)) {
+            $user = User::update(['last_online_at' => date('Y-m-d H:i:s')]);
             return $this->outputData(
                 ['with_data' => 'Login success'],
                 ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name]
