@@ -17,9 +17,9 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['POST', 'GET', 'DELETE'],
+    'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000/', 'http://localhost:8080/', 'https://cvan.ru/', 'https://api.cvan.ru/'],
+    'allowed_origins' => ['http://localhost:3000/'],
 
     'allowed_origins_patterns' => [],
 
