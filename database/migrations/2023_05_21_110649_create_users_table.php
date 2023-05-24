@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('bitrix_link')->nullable();
             $table->timestamp('subscribe_end')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamp("last_online_at")->useCurrent();
             $table->timestamps();
         });

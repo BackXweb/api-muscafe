@@ -85,14 +85,16 @@ class UserController extends Controller
         })->first();
 
         if ($user) {
-            if ($user->login !== $validated['login'])
+            if (!empty($validated['subscribe_end']) && $user->login !== $validated['login'])
                 if (User::where('login', $validated['login'])->first())
                     throw ValidationException::withMessages(['login' => ['The login has already been taken.']]);
 
-            if (!Hash::check($validated['password'], $user->password)) {
-                $validated['password'] = Hash::make($validated['password']);
-            } else {
-                unset($validated['password']);
+            if (!empty($validated['password'])) {
+                if (!Hash::check($validated['password'], $user->password)) {
+                    $validated['password'] = Hash::make($validated['password']);
+                } else {
+                    unset($validated['password']);
+                }
             }
 
             if (!empty($validated['subscribe_end']))
