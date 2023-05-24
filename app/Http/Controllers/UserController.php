@@ -46,7 +46,7 @@ class UserController extends Controller
             ],
             User::whereHas('role', function ($query) {
                 $query->where('name', 'user');
-            })->get()
+            })->with('manager')->get()
         );
     }
 

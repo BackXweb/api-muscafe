@@ -14,6 +14,7 @@ class User extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = [
+        'manager_id',
         'role_id',
         'login',
         'password',
@@ -28,5 +29,13 @@ class User extends Authenticatable
 
     public function role() {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function manager() {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    public function users() {
+        return $this->hasMany(User::class, 'manager_id');
     }
 }
