@@ -21,7 +21,7 @@ class LastOneAt
             return $next($request);
         }
 
-        if ($request->user()->last_online_at->diffInMinutes(now()) > 5) {
+        if (empty($request->user()->last_online_at) || $request->user()->last_online_at->diffInMinutes(now()) > 5) {
             DB::table("users")
                 ->where("id", $request->user()->id)
                 ->update(["last_online_at" => now()]);
