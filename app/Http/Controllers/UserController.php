@@ -24,7 +24,7 @@ class UserController extends Controller
         if ($user && Hash::check($validated['password'], $user->password)) {
             return $this->outputData(
                 ['with_data' => 'Login success'],
-                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken]
+                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name]
             );
         } else {
             throw ValidationException::withMessages(['login' => ['The provided credentials are incorrect.'],]);
