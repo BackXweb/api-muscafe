@@ -35,3 +35,13 @@ Route::prefix('/manager')->group(function () {
         Route::delete('/destroy', [\App\Http\Controllers\ManagerController::class, 'destroy']);
     });
 });
+
+Route::prefix('/facility')->group(function () {
+    Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
+        Route::post('/store', [\App\Http\Controllers\FacilityController::class, 'store']);
+        Route::get('/', [\App\Http\Controllers\FacilityController::class, 'index']);
+        Route::get('/show', [\App\Http\Controllers\FacilityController::class, 'show']);
+        Route::post('/update', [\App\Http\Controllers\FacilityController::class, 'update']);
+        Route::delete('/destroy', [\App\Http\Controllers\FacilityController::class, 'destroy']);
+    });
+});
