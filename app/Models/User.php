@@ -38,4 +38,8 @@ class User extends Authenticatable
     public function users() {
         return $this->hasMany(User::class, 'manager_id');
     }
+
+    public function facilities() {
+        return $this->hasMany(Facility::class, 'user_id');
+    }
 }

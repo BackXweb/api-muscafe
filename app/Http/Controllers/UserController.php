@@ -42,7 +42,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return $this->outputData(
+        return $this->outputPaginationData(
             [
                 'with_data' => 'Users found successfully',
                 'without_data' => 'Users not found'
@@ -79,7 +79,7 @@ class UserController extends Controller
 
         User::create($validated);
 
-        return $this->outputData(['without_data' => 'Create user successfully'],);
+        return $this->outputData(['without_data' => 'Create user successfully']);
     }
 
     public function update(UpdateRequest $request)

@@ -27,6 +27,15 @@ class Controller extends BaseController
             return response()->json(['message' => $message['without_data'], 'data' => $data], 200);
     }
 
+    protected function outputPaginationData($message, $data = []) {
+        $data = collect($data);
+
+        if (!empty($data['data']) && count($data['data']) > 0)
+            return response()->json(['message' => $message['with_data'], 'data' => $data], 200);
+        else
+            return response()->json(['message' => $message['without_data'], 'data' => $data], 200);
+    }
+
     protected function outputError($message, $code) {
         return response()->json(['message' => $message], $code);
     }

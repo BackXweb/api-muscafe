@@ -15,7 +15,7 @@ class ManagerController extends Controller
 {
     public function index(Request $request)
     {
-        return $this->outputData(
+        return $this->outputPaginationData(
             [
                 'with_data' => 'Managers found successfully',
                 'without_data' => 'Managers not found'
