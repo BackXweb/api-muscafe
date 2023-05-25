@@ -40,7 +40,7 @@ class UserController extends Controller
         return $this->outputData(['without_data' => 'Logout success']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         return $this->outputData(
             [
@@ -51,8 +51,21 @@ class UserController extends Controller
                 $query->where('name', 'user');
             })->with('manager', function ($query) {
                 $query->select(['id', 'name']);
-            })->get()
+            })->simplePaginate((int)$request->per_page)
         );
+    }
+
+    public function show(Request $request)
+    {
+        $user = User::where('id', $request->id)->whereHas('role', function ($query) {
+            $query->where('name', 'user');
+        })->first();
+
+        if ($user) {
+            return $this->outputData(['with_data' => 'User found successfully'], $user);
+        } else {
+            return $this->outputData(['without_data' => 'User not found']);
+        }
     }
 
     public function store(StoreRequest $request)
@@ -67,19 +80,6 @@ class UserController extends Controller
         User::create($validated);
 
         return $this->outputData(['without_data' => 'Create user successfully'],);
-    }
-
-    public function show(Request $request)
-    {
-        $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', 'user');
-        })->first();
-
-        if ($user) {
-            return $this->outputData(['with_data' => 'User found successfully'], $user);
-        } else {
-            return $this->outputData(['without_data' => 'User not found']);
-        }
     }
 
     public function update(UpdateRequest $request)

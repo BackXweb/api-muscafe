@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 
 class ManagerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return $this->outputData(
             [
@@ -22,20 +22,8 @@ class ManagerController extends Controller
             ],
             User::whereHas('role', function ($query) {
                 $query->where('name', 'manager');
-            })->get()
+            })->simplePaginate((int)$request->per_page)
         );
-    }
-
-    public function store(StoreRequest $request)
-    {
-        $validated = $request->validated();
-
-        $validated['role_id'] = Role::where('name', 'manager')->first()->id;
-        $validated['password'] = Hash::make($validated['password']);
-
-        User::create($validated);
-
-        return $this->outputData(['without_data' => 'Create manager successfully'],);
     }
 
     public function show(Request $request)
@@ -49,6 +37,18 @@ class ManagerController extends Controller
         } else {
             return $this->outputData(['without_data' => 'Manager not found']);
         }
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $validated = $request->validated();
+
+        $validated['role_id'] = Role::where('name', 'manager')->first()->id;
+        $validated['password'] = Hash::make($validated['password']);
+
+        User::create($validated);
+
+        return $this->outputData(['without_data' => 'Create manager successfully'],);
     }
 
     public function update(UpdateRequest $request)
