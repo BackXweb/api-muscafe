@@ -27,7 +27,7 @@ class UserController extends Controller
                 ->update(["last_online_at" => now()]);
             return $this->outputData(
                 ['with_data' => 'Login success'],
-                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name]
+                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
             );
         } else {
             throw ValidationException::withMessages(['login' => ['The provided credentials are incorrect.'],]);
