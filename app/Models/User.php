@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'bitrix_link',
         'subscribe_end',
+        'status',
     ];
 
     protected $hidden = ['password'];
