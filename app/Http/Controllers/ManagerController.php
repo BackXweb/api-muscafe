@@ -22,7 +22,7 @@ class ManagerController extends Controller
             ],
             User::whereHas('role', function ($query) {
                 $query->where('name', 'manager');
-            })->simplePaginate((int)$request->per_page)
+            })->paginate((int)$request->per_page)
         );
     }
 

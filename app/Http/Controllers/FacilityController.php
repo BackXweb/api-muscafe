@@ -20,7 +20,7 @@ class FacilityController extends Controller
                 $query_1->whereHas('role', function ($query_2) {
                     $query_2->where('name', 'user');
                 });
-            })->simplePaginate((int)$request->per_page)
+            })->paginate((int)$request->per_page)
         );
     }
 

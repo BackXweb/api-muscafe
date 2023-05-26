@@ -65,7 +65,7 @@ class UserController extends Controller
                 'with_data' => 'Users found successfully',
                 'without_data' => 'Users not found'
             ],
-            $query->simplePaginate((int)request('per_page', 15))
+            $query->paginate((int)request('per_page', 15))
         );
     }
 
