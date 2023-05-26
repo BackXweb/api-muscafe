@@ -44,4 +44,8 @@ class Controller extends BaseController
         $filename = explode('/', $path);
         return array_pop($filename);
     }
+
+    protected function getSortData($sort) {
+        return explode('.', $sort);
+    }
 }

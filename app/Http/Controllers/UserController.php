@@ -42,16 +42,30 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $query = User::whereHas('role', function ($query) {
+            $query->where('name', 'user');
+        })->with('manager', function ($query) {
+            $query->select(['id', 'name']);
+        })
+            ->orderBy(request('sort', 'created_at'), request('order', 'desc'))
+            ->orderBy('id', 'desc')
+            ->where('status', request('status', 1));
+
+        if (!empty($request->manager_id)) {
+            $query->where('manager_id', $request->manager_id);
+        }
+
+        if (request('subscribe_end', 1))
+            $query->whereNotNull('subscribe_end');
+        else
+            $query->whereNull('subscribe_end');
+
         return $this->outputPaginationData(
             [
                 'with_data' => 'Users found successfully',
                 'without_data' => 'Users not found'
             ],
-            User::whereHas('role', function ($query) {
-                $query->where('name', 'user');
-            })->with('manager', function ($query) {
-                $query->select(['id', 'name']);
-            })->simplePaginate((int)$request->per_page)
+            $query->simplePaginate((int)request('per_page', 15))
         );
     }
 
@@ -74,7 +88,7 @@ class UserController extends Controller
 
         $validated['role_id'] = Role::where('name', 'user')->first()->id;
         $validated['password'] = Hash::make($validated['password']);
-        if (isset($request->subscribe_end) && !empty($request->subscribe_end))
+        if (!empty($validated['subscribe_end']))
             $validated['subscribe_end'] = date('Y-m-d H:i:s', strtotime($validated['subscribe_end']));
 
         User::create($validated);
@@ -113,7 +127,8 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
             $query->where('name', 'user');
         })->first();
