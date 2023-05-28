@@ -23,7 +23,7 @@ class FacilityFactory extends Factory
 
         return [
             'user_id' => rand(10, 100),
-            'name' => $this->faker->words(1, false),
+            'name' => $this->faker->company(),
             'address' => $use_any ? null : $this->faker->address(),
             'use_any' => $use_any
         ];
