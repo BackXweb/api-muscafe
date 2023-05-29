@@ -156,7 +156,6 @@ class UserController extends Controller
         $validated = $request->validated();
 
         $validated['role_id'] = Role::where('name', 'user')->first()->id;
-        $validated['password'] = Hash::make($validated['password']);
         if (!empty($validated['subscribe_end']))
             $validated['subscribe_end'] = date('Y-m-d H:i:s', strtotime($validated['subscribe_end']));
 

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('manager_id')->references('id')->on('users');
             $table->string('reset_token')->unique()->nullable();
             $table->string('login')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('name');
             $table->string('bitrix_link')->nullable();
             $table->timestamp('subscribe_end')->nullable();

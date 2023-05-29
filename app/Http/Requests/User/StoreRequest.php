@@ -26,7 +26,6 @@ class StoreRequest extends FormRequest
         return [
             'manager_id' => ['required', 'integer', 'min:1', 'exists:users,id'],
             'login' => ['required', 'string', 'min:1', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:1', 'max:255'],
             'bitrix_link' => ['required', 'string', 'min:1', 'max:255'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'subscribe_end' => ['nullable', 'string', 'min:1', 'max:255'],
