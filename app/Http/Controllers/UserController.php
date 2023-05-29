@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\ResetPasswordRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,7 +84,7 @@ class UserController extends Controller
         }
     }
 
-    public function reset_password(Request $request)
+    public function reset_password(ResetPasswordRequest $request)
     {
         $validated = $request->validated();
         $user = User::whereHas('role', function ($query) {
