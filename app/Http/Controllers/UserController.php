@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\StoreRequest;
@@ -31,6 +32,73 @@ class UserController extends Controller
             );
         } else {
             throw ValidationException::withMessages(['login' => ['The provided credentials are incorrect.'],]);
+        }
+    }
+
+    public function login_manager(Request $request)
+    {
+        $user = User::where('id', $request->id)->with('role')->first();
+
+        if ($user) {
+            $request->user()->currentAccessToken()->delete();
+
+            return $this->outputData(
+                ['with_data' => 'Login success'],
+                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+            );
+        } else {
+            return $this->outputData(['without_data' => 'User not found']);
+        }
+    }
+
+    public function reset_link(Request $request)
+    {
+        $user = User::whereHas('role', function ($query) {
+            $query->where('name', 'user');
+        })->where('id', $request->id)->with('role')->first();
+
+        if ($user) {
+            $validated['reset_token'] = Str::random(30);
+            $user->update($validated);
+
+            return $this->outputData(
+                ['with_data' => 'Token for reset password created successfully'],
+                ['token' => $validated['reset_token']]
+            );
+        } else {
+            return $this->outputData(['without_data' => 'User not found']);
+        }
+    }
+
+    public function check_reset_link(Request $request)
+    {
+        $user = User::whereHas('role', function ($query) {
+            $query->where('name', 'user');
+        })->where('reset_token', $request->reset_token)->first();
+
+        if ($user) {
+            return $this->outputData(['without_data' => 'User found successfully']);
+        } else {
+            return $this->outputData(['without_data' => 'User not found']);
+        }
+    }
+
+    public function reset_password(Request $request)
+    {
+        $validated = $request->validated();
+        $user = User::whereHas('role', function ($query) {
+            $query->where('name', 'user');
+        })->where('reset_token', $request->reset_token)->with('role')->first();
+
+        if ($user) {
+            $user->update($validated);
+
+            return $this->outputData(
+                ['with_data' => 'Password reset successfully'],
+                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+            );
+        } else {
+            return $this->outputData(['without_data' => 'User not found']);
         }
     }
 

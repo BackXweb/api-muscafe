@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('role_id')->references('id')->on('roles');
             $table->unsignedBigInteger('manager_id')->nullable();
             $table->foreign('manager_id')->references('id')->on('users');
+            $table->string('reset_token')->unique()->nullable();
             $table->string('login')->unique();
             $table->string('password');
             $table->string('name');

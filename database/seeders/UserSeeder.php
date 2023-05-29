@@ -38,9 +38,21 @@ class UserSeeder extends Seeder
                 'login' => 'olga',
                 'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
                 'name' => 'Ольга'
+            ],
+            [
+                'role_id' => 1,
+                'login' => 'user',
+                'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
+                'name' => 'Иванов Иван Иванович'
+            ],
+            [
+                'role_id' => 1,
+                'login' => 'user-1',
+                'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
+                'name' => 'Петров Петр Петрович'
             ]
         ]);
 
-        User::factory()->count(100)->create();
+        User::factory()->count(50)->create();
     }
 }
