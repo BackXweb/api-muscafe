@@ -77,9 +77,9 @@ class UserController extends Controller
         })->where('reset_token', $request->reset_token)->first();
 
         if ($user) {
-            return $this->outputData(['without_data' => 'User found successfully']);
+            return response()->json(['message' => 'User found successfully', 'data' => true]);
         } else {
-            return $this->outputData(['without_data' => 'User not found']);
+            return response()->json(['message' => 'User not found', 'data' => false]);
         }
     }
 
