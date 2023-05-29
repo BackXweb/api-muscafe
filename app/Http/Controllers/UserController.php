@@ -93,6 +93,7 @@ class UserController extends Controller
 
         if ($user) {
             $validated['reset_token'] = null;
+            $validated['password'] = Hash::make($validated['password']);
             $user->update($validated);
 
             return $this->outputData(
@@ -176,14 +177,6 @@ class UserController extends Controller
             if (!empty($validated['subscribe_end']) && $user->login !== $validated['login'])
                 if (User::where('login', $validated['login'])->first())
                     throw ValidationException::withMessages(['login' => ['The login has already been taken.']]);
-
-            if (!empty($validated['password'])) {
-                if (!Hash::check($validated['password'], $user->password)) {
-                    $validated['password'] = Hash::make($validated['password']);
-                } else {
-                    unset($validated['password']);
-                }
-            }
 
             if (!empty($validated['subscribe_end']))
                 $validated['subscribe_end'] = date('Y-m-d H:i:s', strtotime($request->subscribe_end));
