@@ -202,6 +202,6 @@ class UserController extends Controller
     }
 
     public function get_user(Request $request) {
-        return $this->outputData(['with_data' => 'User data', User::where('id', $request->user()->id)->with('role')]);
+        return $this->outputData(['with_data' => 'User data', User::where('id', $request->user()->id)->with('role')->first()]);
     }
 }
