@@ -91,6 +91,7 @@ class UserController extends Controller
         })->where('reset_token', $request->reset_token)->with('role')->first();
 
         if ($user) {
+            $validated['reset_token'] = null;
             $user->update($validated);
 
             return $this->outputData(
