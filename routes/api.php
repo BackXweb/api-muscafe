@@ -23,6 +23,11 @@ Route::prefix('/user')->group(function () {
         Route::get('/show', [\App\Http\Controllers\UserController::class, 'show']);
         Route::post('/update', [\App\Http\Controllers\UserController::class, 'update']);
         Route::delete('/destroy', [\App\Http\Controllers\UserController::class, 'destroy']);
+
+        Route::get('/login-manager', [\App\Http\Controllers\UserController::class, 'manager_login']);
+        Route::get('/reset-link', [\App\Http\Controllers\UserController::class, 'reset_link']);
+        Route::get('/check-reset-link', [\App\Http\Controllers\UserController::class, 'check_reset_link']);
+        Route::post('/reset-password', [\App\Http\Controllers\UserController::class, 'reset_password']);
     });
 });
 
