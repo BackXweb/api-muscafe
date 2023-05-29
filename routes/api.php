@@ -24,11 +24,12 @@ Route::prefix('/user')->group(function () {
         Route::post('/update', [\App\Http\Controllers\UserController::class, 'update']);
         Route::delete('/destroy', [\App\Http\Controllers\UserController::class, 'destroy']);
 
-        Route::get('/login-manager', [\App\Http\Controllers\UserController::class, 'manager_login']);
+        Route::get('/login-manager', [\App\Http\Controllers\UserController::class, 'login_manager']);
         Route::get('/reset-link', [\App\Http\Controllers\UserController::class, 'reset_link']);
-        Route::get('/check-reset-link', [\App\Http\Controllers\UserController::class, 'check_reset_link']);
-        Route::post('/reset-password', [\App\Http\Controllers\UserController::class, 'reset_password']);
     });
+
+    Route::get('/check-reset-link', [\App\Http\Controllers\UserController::class, 'check_reset_link']);
+    Route::post('/reset-password', [\App\Http\Controllers\UserController::class, 'reset_password']);
 });
 
 Route::prefix('/manager')->group(function () {

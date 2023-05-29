@@ -35,7 +35,7 @@ class UserController extends Controller
         }
     }
 
-    public function manager_login(Request $request)
+    public function login_manager(Request $request)
     {
         $user = User::where('id', $request->id)->with('role')->first();
 
