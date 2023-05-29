@@ -38,23 +38,27 @@ class UserSeeder extends Seeder
                 'login' => 'olga',
                 'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
                 'name' => 'Ольга'
-            ],
+            ]
+        ]);
+
+        User::insert([
             [
                 'role_id' => 1,
                 'login' => 'user',
                 'manager_id' => 1,
                 'bitrix_link' => 'https://www.bitrix24.ru/',
                 'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
-                'name' => 'Иванов Иван Иванович'
+                'name' => 'Иванов Иван Иванович',
+                'subscribe_end' => null
             ],
             [
                 'role_id' => 1,
                 'login' => 'user-1',
-                'manager_id' => 1,
+                'manager_id' => 2,
                 'bitrix_link' => 'https://www.bitrix24.ru/',
                 'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
                 'name' => 'Петров Петр Петрович',
-                'subscribe_end' => '2023-05-29 00:00:00'
+                'subscribe_end' => '2023-05-29'
             ]
         ]);
 
