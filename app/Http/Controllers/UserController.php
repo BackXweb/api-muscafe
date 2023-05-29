@@ -24,9 +24,6 @@ class UserController extends Controller
         $user = User::where('login', $validated['login'])->with('role')->first();
 
         if ($user && Hash::check($validated['password'], $user->password)) {
-            DB::table("users")
-                ->where("id", $user->id)
-                ->update(["last_online_at" => now()]);
             return $this->outputData(
                 ['with_data' => 'Login success'],
                 ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
@@ -202,5 +199,9 @@ class UserController extends Controller
         } else {
             return $this->outputData(['without_data' => 'User not found']);
         }
+    }
+
+    public function get_user(Request $request) {
+        return $this->outputData(['with_data' => 'User data', User::where('id', $request->user()->id)->with('role')]);
     }
 }

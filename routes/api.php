@@ -28,6 +28,8 @@ Route::prefix('/user')->group(function () {
         Route::get('/reset-link', [\App\Http\Controllers\UserController::class, 'reset_link']);
     });
 
+    Route::middleware(['auth:sanctum'])->get('/get-user', [\App\Http\Controllers\UserController::class, 'get_user']);
+
     Route::get('/check-reset-link', [\App\Http\Controllers\UserController::class, 'check_reset_link']);
     Route::post('/reset-password', [\App\Http\Controllers\UserController::class, 'reset_password']);
 });
