@@ -53,3 +53,21 @@ Route::prefix('/facility')->group(function () {
         Route::delete('/destroy', [\App\Http\Controllers\FacilityController::class, 'destroy']);
     });
 });
+
+Route::prefix('/playlist')->group(function () {
+    Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
+        Route::post('/store', [\App\Http\Controllers\PlaylistController::class, 'store']);
+        Route::get('/', [\App\Http\Controllers\PlaylistController::class, 'index']);
+        Route::get('/show', [\App\Http\Controllers\PlaylistController::class, 'show']);
+        // Route::post('/update', [\App\Http\Controllers\PlaylistController::class, 'update']);
+        Route::delete('/destroy', [\App\Http\Controllers\PlaylistController::class, 'destroy']);
+    });
+});
+
+Route::prefix('/style')->group(function () {
+    Route::middleware(['auth:sanctum', 'abilities:user'])->group(function () {
+        Route::get('/', [\App\Http\Controllers\StyleController::class, 'index']);
+        Route::get('/show', [\App\Http\Controllers\StyleController::class, 'show']);
+        Route::get('/list-music', [\App\Http\Controllers\StyleController::class, 'music']);
+    });
+});

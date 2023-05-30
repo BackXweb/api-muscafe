@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('playlist_to_style', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('style_id');
-            $table->foreign('style_id')->references('id')->on('styles');
             $table->unsignedBigInteger('playlist_id');
             $table->foreign('playlist_id')->references('id')->on('playlists');
+            $table->string('storage_style');
             $table->unsignedInteger('chance');
             $table->dateTime('datetime');
             $table->timestamps();
