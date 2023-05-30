@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Playlist extends Model
 {
-    use HasFactory;
+    protected $table = 'playlists';
+
+    protected $fillable = [
+        'user_id',
+        'name',
+        'time_start',
+        'time_end',
+    ];
 }

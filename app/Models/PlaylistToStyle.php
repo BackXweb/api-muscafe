@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class PlaylistToStyle extends Model
 {
-    use HasFactory;
+    protected $table = 'playlist_to_style';
+
+    protected $fillable = [
+        'playlist_id',
+        'storage_style',
+        'chance',
+        'time'
+    ];
 }
