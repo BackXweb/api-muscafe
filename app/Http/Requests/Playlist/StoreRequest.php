@@ -26,10 +26,10 @@ class StoreRequest extends FormRequest
         return [
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
-            'styles.*.datetime' => ['required', 'string', 'min:1', 'max:255'],
+            'styles.*.time' => ['required', 'string', 'min:1', 'max:255'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
-            'datetime_start' => ['required', 'string', 'min:1', 'max:255'],
-            'datetime_end' => ['required', 'string', 'min:1', 'max:255'],
+            'time_start' => ['required', 'string', 'min:1', 'max:255'],
+            'time_end' => ['required', 'string', 'min:1', 'max:255'],
         ];
     }
 }

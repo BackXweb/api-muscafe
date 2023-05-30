@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('playlist_id')->references('id')->on('playlists');
             $table->string('storage_style');
             $table->unsignedInteger('chance');
-            $table->dateTime('datetime');
+            $table->time('time');
             $table->timestamps();
         });
     }

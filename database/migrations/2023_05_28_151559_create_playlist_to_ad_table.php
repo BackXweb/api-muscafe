@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('ad_id')->references('id')->on('ads');
             $table->unsignedBigInteger('playlist_id');
             $table->foreign('playlist_id')->references('id')->on('playlists');
-            $table->dateTime('datetime');
+            $table->time('time');
             $table->boolean('use_any');
             $table->timestamps();
         });

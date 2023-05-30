@@ -33,10 +33,10 @@ class StyleController extends Controller
 
                 $json[] = [
                     'id' => last(explode('/', $style)),
-                    'storage' => $style,
                     'name' => $style_content->name,
                     'description' => $style_content->description,
                     'image' => Storage::url($style . '/' . $style_content->image),
+                    'storage' => Storage::url($style),
                 ];
             }
         }
