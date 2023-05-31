@@ -123,7 +123,7 @@ class UserController extends Controller
             ->orderBy('id', 'desc');
 
         if (!empty($request->status)) {
-            $query->where('manager_id', $request->status);
+            $query->where('status', $request->status);
         }
 
         if (!empty($request->manager_id)) {
