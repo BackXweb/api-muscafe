@@ -122,7 +122,7 @@ class UserController extends Controller
             ->orderBy(request('sort', 'created_at'), request('order', 'desc'))
             ->orderBy('id', 'desc');
 
-        if (!empty($request->status)) {
+        if (!empty($request->status) || $request->status == 0) {
             $query->where('status', $request->status);
         }
 
