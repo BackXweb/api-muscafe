@@ -24,10 +24,14 @@ class UserController extends Controller
         $user = User::where('login', $validated['login'])->with('role')->first();
 
         if ($user && Hash::check($validated['password'], $user->password)) {
-            return $this->outputData(
-                ['with_data' => 'Login success'],
-                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
-            );
+            if (($user->status && ($user->role->name === 'manager' || empty($user->subscribe_end))) || ($user->status && $user->subscribe_end > date('Y-m-d'))) {
+                return $this->outputData(
+                    ['with_data' => 'Login success'],
+                    ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                );
+            } else {
+                return response('Login denied', 403);
+            }
         } else {
             throw ValidationException::withMessages(['login' => ['The provided credentials are incorrect.'],]);
         }
