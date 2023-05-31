@@ -120,8 +120,11 @@ class UserController extends Controller
             $query->select(['id', 'name']);
         })
             ->orderBy(request('sort', 'created_at'), request('order', 'desc'))
-            ->orderBy('id', 'desc')
-            ->where('status', request('status', 1));
+            ->orderBy('id', 'desc');
+
+        if (!empty($request->status)) {
+            $query->where('manager_id', $request->status);
+        }
 
         if (!empty($request->manager_id)) {
             $query->where('manager_id', $request->manager_id);
