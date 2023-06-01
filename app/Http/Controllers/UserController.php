@@ -115,8 +115,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $query = User::whereHas('role', function ($query, $request) {
-            $query->where('name', 'LIKE', !empty($request->role) ? $request->role : 'user.%');
+        $query = User::whereHas('role', function ($query) {
+            $query->where('name', 'LIKE', request('role', 'user.%'));
         })->with('manager', function ($query) {
             $query->select(['id', 'name']);
         })->with('role', function ($query) {
