@@ -43,7 +43,7 @@ Route::controller(UserController::class)->group(function () {
     });
 });
 
-Route::middleware(['auth:sanctum', 'abilities:manager'])->controller(RoleController::class)->group(function () {
+Route::prefix('/role')->middleware(['auth:sanctum', 'abilities:manager'])->controller(RoleController::class)->group(function () {
     Route::get('/', 'index');
 });
 
