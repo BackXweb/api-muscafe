@@ -12,40 +12,30 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $storage = 'https://api.cvan.ru/storage/';
-
-    protected function getDomain() {
-        return ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-    }
-
-    protected function outputData($message, $data = []) {
+    protected function outputData($message, $data = [])
+    {
         $data = collect($data);
 
-        if ($data->isNotEmpty() && $data->count() > 0)
+        if ($data->isNotEmpty() && $data->count() > 0) {
             return response()->json(['message' => $message['with_data'], 'data' => $data], 200);
-        else
+        } else {
             return response()->json(['message' => $message['without_data'], 'data' => $data], 200);
+        }
     }
 
-    protected function outputPaginationData($message, $data = []) {
+    protected function outputPaginationData($message, $data = [])
+    {
         $data = collect($data);
 
-        if (!empty($data['data']) && count($data['data']) > 0)
+        if (!empty($data['data']) && count($data['data']) > 0) {
             return response()->json(['message' => $message['with_data'], 'data' => $data], 200);
-        else
+        } else {
             return response()->json(['message' => $message['without_data'], 'data' => $data], 200);
+        }
     }
 
-    protected function outputError($message, $code) {
+    protected function outputError($message, $code)
+    {
         return response()->json(['message' => $message], $code);
-    }
-
-    protected function getFilename($path) {
-        $filename = explode('/', $path);
-        return array_pop($filename);
-    }
-
-    protected function getSortData($sort) {
-        return explode('.', $sort);
     }
 }

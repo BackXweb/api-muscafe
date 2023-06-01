@@ -24,6 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'role_id' => ['required', 'integer', 'min:1', 'exists:roles,id'],
             'manager_id' => ['required', 'integer', 'min:1', 'exists:users,id'],
             'login' => ['required', 'string', 'min:1', 'max:255', 'unique:users'],
             'bitrix_link' => ['required', 'string', 'min:1', 'max:255'],

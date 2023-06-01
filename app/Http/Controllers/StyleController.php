@@ -50,21 +50,13 @@ class StyleController extends Controller
 
     public function music(Request $request)
     {
-        if (
-            !empty($request->id)
-            && !empty($request->style)
-            && Storage::exists('public/music/' . $request->id . '/' . $request->style)
-        ) {
+        if (!empty($request->id) && !empty($request->style) && Storage::exists('public/music/' . $request->id . '/' . $request->style)) {
             foreach (Storage::files('public/music/' . $request->id . '/' . $request->style . '/music') as $music) {
                 $json[] = Storage::url($music);
             }
         }
 
-        if (
-            !isset($json)
-            && !empty($request->storage)
-            && Storage::exists($request->storage)
-        ) {
+        if (!isset($json) && !empty($request->storage) && Storage::exists($request->storage)) {
             foreach (Storage::files($request->storage . '/music') as $music) {
                 $json[] = Storage::url($music);
             }

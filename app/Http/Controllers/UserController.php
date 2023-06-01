@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\ResetPasswordRequest;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -27,13 +26,13 @@ class UserController extends Controller
             if (($user->status && ($user->role->name === 'manager' || empty($user->subscribe_end))) || ($user->status && $user->subscribe_end > date('Y-m-d'))) {
                 return $this->outputData(
                     ['with_data' => 'Login success'],
-                    ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                    ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
                 );
             } else {
-                return response('Login denied', 403);
+                return $this->outputError('Login denied', 403);
             }
         } else {
-            throw ValidationException::withMessages(['login' => ['The provided credentials are incorrect.'],]);
+            throw ValidationException::withMessages(['login' => ['The provided credentials are incorrect']]);
         }
     }
 
@@ -46,7 +45,7 @@ class UserController extends Controller
 
             return $this->outputData(
                 ['with_data' => 'Login success'],
-                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
             );
         } else {
             return $this->outputData(['without_data' => 'User not found']);
@@ -56,7 +55,7 @@ class UserController extends Controller
     public function reset_link(Request $request)
     {
         $user = User::whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->where('id', $request->id)->with('role')->first();
 
         if ($user) {
@@ -75,7 +74,7 @@ class UserController extends Controller
     public function check_reset_link(Request $request)
     {
         $user = User::whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->where('reset_token', $request->reset_token)->first();
 
         if ($user) {
@@ -89,17 +88,18 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $user = User::whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->where('reset_token', $request->reset_token)->with('role')->first();
 
         if ($user) {
             $validated['reset_token'] = null;
             $validated['password'] = Hash::make($validated['password']);
+
             $user->update($validated);
 
             return $this->outputData(
                 ['with_data' => 'Password reset successfully'],
-                ['token' => $user->createToken($user->login, [$user->role->name])->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
             );
         } else {
             return $this->outputData(['without_data' => 'User not found']);
@@ -109,18 +109,17 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
         return $this->outputData(['without_data' => 'Logout success']);
     }
 
     public function index(Request $request)
     {
         $query = User::whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->with('manager', function ($query) {
             $query->select(['id', 'name']);
-        })
-            ->orderBy(request('sort', 'created_at'), request('order', 'desc'))
-            ->orderBy('id', 'desc');
+        })->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
 
         if (!empty($request->status) || $request->status === '0') {
             $query->where('status', $request->status);
@@ -130,16 +129,14 @@ class UserController extends Controller
             $query->where('manager_id', $request->manager_id);
         }
 
-        if (request('subscribe_end', 1))
+        if (request('subscribe_end', 1)) {
             $query->whereNotNull('subscribe_end');
-        else
+        } else {
             $query->whereNull('subscribe_end');
+        }
 
         return $this->outputPaginationData(
-            [
-                'with_data' => 'Users found successfully',
-                'without_data' => 'Users not found'
-            ],
+            ['with_data' => 'Users found successfully', 'without_data' => 'Users not found'],
             $query->paginate((int)request('per_page', 15))
         );
     }
@@ -147,7 +144,7 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->first();
 
         if ($user) {
@@ -161,9 +158,9 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
-        $validated['role_id'] = Role::where('name', 'user')->first()->id;
-        if (!empty($validated['subscribe_end']))
+        if (!empty($validated['subscribe_end'])) {
             $validated['subscribe_end'] = date('Y-m-d H:i:s', strtotime($validated['subscribe_end']));
+        }
 
         User::create($validated);
 
@@ -174,16 +171,19 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->first();
 
         if ($user) {
-            if (!empty($validated['subscribe_end']) && $user->login !== $validated['login'])
-                if (User::where('login', $validated['login'])->first())
-                    throw ValidationException::withMessages(['login' => ['The login has already been taken.']]);
+            if (!empty($validated['login']) && $user->login !== $validated['login']) {
+                if (User::where('login', $validated['login'])->first()) {
+                    throw ValidationException::withMessages(['login' => ['The login has already been taken']]);
+                }
+            }
 
-            if (!empty($validated['subscribe_end']))
+            if (!empty($validated['subscribe_end'])) {
                 $validated['subscribe_end'] = date('Y-m-d H:i:s', strtotime($request->subscribe_end));
+            }
 
             $user->update($validated);
 
@@ -196,12 +196,13 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', 'user');
+            $query->where('name', request('role', 'user.basic'));
         })->first();
 
         if ($user) {
             DB::query('DELETE FROM personal_access_tokens WHERE name = ' . $user->login);
             $user->delete();
+
             return $this->outputData(['without_data' => 'User deleted']);
         } else {
             return $this->outputData(['without_data' => 'User not found']);

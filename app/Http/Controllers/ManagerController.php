@@ -16,10 +16,7 @@ class ManagerController extends Controller
     public function index(Request $request)
     {
         return $this->outputPaginationData(
-            [
-                'with_data' => 'Managers found successfully',
-                'without_data' => 'Managers not found'
-            ],
+            ['with_data' => 'Managers found successfully', 'without_data' => 'Managers not found'],
             User::whereHas('role', function ($query) {
                 $query->where('name', 'manager');
             })->paginate((int)$request->per_page)
@@ -59,9 +56,11 @@ class ManagerController extends Controller
         })->first();
 
         if ($user) {
-            if (!empty($validated['login']) && $user->login !== $validated['login'])
-                if (User::where('login', $validated['login'])->first())
-                    throw ValidationException::withMessages(['login' => ['The login has already been taken.']]);
+            if (!empty($validated['login']) && $user->login !== $validated['login']) {
+                if (User::where('login', $validated['login'])->first()) {
+                    throw ValidationException::withMessages(['login' => ['The login has already been taken']]);
+                }
+            }
 
             if (!empty($validated['password'])) {
                 if (!Hash::check($validated['password'], $user->password)) {
@@ -86,11 +85,12 @@ class ManagerController extends Controller
         })->first();
 
         if ($user) {
-            if ($user->id === $request->user()->id)
+            if ($user->id === $request->user()->id) {
                 return $this->outputData(['without_data' => 'You cannot delete the manager you are logged in as']);
-            else {
+            } else {
                 DB::query('DELETE FROM personal_access_tokens WHERE name = ' . $user->login);
                 $user->delete();
+
                 return $this->outputData(['without_data' => 'Manager deleted']);
             }
         } else {

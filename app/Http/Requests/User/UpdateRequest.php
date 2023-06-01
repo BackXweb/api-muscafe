@@ -24,7 +24,8 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'manager_id' => ['nullable', 'integer', 'min:1', 'exists:users'],
+            'role_id' => ['nullable', 'integer', 'min:1', 'exists:roles,id'],
+            'manager_id' => ['nullable', 'integer', 'min:1', 'exists:users,id'],
             'login' => ['nullable', 'string', 'min:1', 'max:255'],
             'bitrix_link' => ['nullable', 'string', 'min:1', 'max:255'],
             'name' => ['nullable', 'string', 'min:1', 'max:255'],
