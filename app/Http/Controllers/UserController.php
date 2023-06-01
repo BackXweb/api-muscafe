@@ -55,7 +55,7 @@ class UserController extends Controller
     public function reset_link(Request $request)
     {
         $user = User::whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+            $query->where('name', 'LIKE', 'user.%');
         })->where('id', $request->id)->with('role')->first();
 
         if ($user) {
@@ -74,7 +74,7 @@ class UserController extends Controller
     public function check_reset_link(Request $request)
     {
         $user = User::whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+            $query->where('name', 'LIKE', 'user.%');
         })->where('reset_token', $request->reset_token)->first();
 
         if ($user) {
@@ -88,7 +88,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $user = User::whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+            $query->where('name', 'LIKE', 'user.%');
         })->where('reset_token', $request->reset_token)->with('role')->first();
 
         if ($user) {
@@ -115,9 +115,11 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $query = User::whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+        $query = User::whereHas('role', function ($query, $request) {
+            $query->where('name', 'LIKE', !empty($request->role) ? $request->role : 'user.%');
         })->with('manager', function ($query) {
+            $query->select(['id', 'name']);
+        })->with('role', function ($query) {
             $query->select(['id', 'name']);
         })->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
 
@@ -144,7 +146,7 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+            $query->where('name', 'LIKE', 'user.%');
         })->first();
 
         if ($user) {
@@ -171,7 +173,7 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+            $query->where('name', 'LIKE', 'user.%');
         })->first();
 
         if ($user) {
@@ -196,7 +198,7 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', request('role', 'user.basic'));
+            $query->where('name', 'LIKE', 'user.%');
         })->first();
 
         if ($user) {

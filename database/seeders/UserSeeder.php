@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
 
         User::insert([
             [
-                'role_id' => 1,
+                'role_id' => 4,
                 'login' => 'user',
                 'manager_id' => 1,
                 'bitrix_link' => 'https://www.bitrix24.ru/',
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
                 'subscribe_end' => null
             ],
             [
-                'role_id' => 1,
+                'role_id' => 3,
                 'login' => 'user-1',
                 'manager_id' => 2,
                 'bitrix_link' => 'https://www.bitrix24.ru/',

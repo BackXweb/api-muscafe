@@ -21,7 +21,7 @@ class UserFactory extends Factory
     {
         return [
             'manager_id' => rand(1, 4),
-            'role_id' => 1,
+            'role_id' => rand(3, 5),
             'name' => $this->faker->name(),
             'login' => $this->faker->unique()->safeEmail(),
             'password' => '$2y$10$MmtjAFh2/PXiIrFdGpWuiee1QMEq.TQPgrWUw7mT8TEN6he5XpINK', // 12345
