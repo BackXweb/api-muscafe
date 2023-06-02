@@ -11,17 +11,19 @@ class StyleController extends Controller
     {
         if (Storage::exists('public/music')) {
             foreach (Storage::directories('public/music') as $directory) {
-                $json[] = [
-                    'id' => last(explode('/', $directory)),
-                    'name' => json_decode(Storage::get($directory . '/config.json'))->name
-                ];
+                if (Storage::exists($directory . '/config.json')) {
+                    $json[] = [
+                        'id' => last(explode('/', $directory)),
+                        'name' => json_decode(Storage::get($directory . '/config.json'))->name
+                    ];
+                }
             }
         }
 
         if (isset($json) && count($json) > 0) {
-            return $this->outputData(['with_data' => 'Styles found successfully'], $json);
+            return $this->outputData(['with_data' => 'Main styles found successfully'], $json);
         } else {
-            return $this->outputData(['without_data' => 'Styles not found']);
+            return $this->outputData(['without_data' => 'Main styles not found']);
         }
     }
 
@@ -29,15 +31,17 @@ class StyleController extends Controller
     {
         if (!empty($request->id) && Storage::exists('public/music/' . $request->id)) {
             foreach (Storage::directories('public/music/' . $request->id) as $style) {
-                $style_content = json_decode(Storage::get($style . '/config.json'));
+                if (Storage::exists($style . '/config.json')) {
+                    $style_content = json_decode(Storage::get($style . '/config.json'));
 
-                $json[] = [
-                    'id' => last(explode('/', $style)),
-                    'name' => $style_content->name,
-                    'description' => $style_content->description,
-                    'image' => Storage::url($style . '/' . $style_content->image),
-                    'storage' => Storage::url($style),
-                ];
+                    $json[] = [
+                        'id' => last(explode('/', $style)),
+                        'name' => $style_content->name,
+                        'description' => $style_content->description,
+                        'image' => Storage::url($style . '/' . $style_content->image),
+                        'storage' => Storage::url($style),
+                    ];
+                }
             }
         }
 

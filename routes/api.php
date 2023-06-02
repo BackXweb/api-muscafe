@@ -8,6 +8,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\StyleController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,4 +76,12 @@ Route::prefix('/style')->middleware(['auth:sanctum', 'abilities:user'])->control
     Route::get('/', 'index');
     Route::get('/show', 'show');
     Route::get('/list-music', 'music');
+});
+
+Route::prefix('/ad')->middleware(['auth:sanctum', 'abilities:user'])->controller(AdController::class)->group(function () {
+    Route::post('/store', 'store');
+    Route::get('/', 'index');
+    Route::get('/show', 'show');
+    Route::post('/update', 'update');
+    Route::delete('/destroy', 'destroy');
 });

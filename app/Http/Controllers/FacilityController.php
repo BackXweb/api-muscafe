@@ -13,11 +13,7 @@ class FacilityController extends Controller
     {
         return $this->outputPaginationData(
             ['with_data' => 'Facilities found successfully', 'without_data' => 'Facilities not found'],
-            Facility::where('user_id', $request->user()->id)->whereHas('user', function ($query_1) {
-                $query_1->whereHas('role', function ($query_2) {
-                    $query_2->where('name', 'user');
-                });
-            })->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
+            Facility::where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
         );
     }
 
@@ -25,11 +21,7 @@ class FacilityController extends Controller
     {
         return $this->outputData(
             ['with_data' => 'Facility found successfully', 'without_data' => 'Facility not found'],
-            Facility::where('user_id', $request->user()->id)->where('id', $request->id)->whereHas('user', function ($query_1) {
-                $query_1->whereHas('role', function ($query_2) {
-                    $query_2->where('name', 'user');
-                });
-            })->first()
+            Facility::where('user_id', $request->user()->id)->where('id', $request->id)->where($request->user()->role->name, 'LIKE', 'user.%')->first()
         );
     }
 
@@ -53,16 +45,12 @@ class FacilityController extends Controller
     public function update(UpdateRequest $request)
     {
         $validated = $request->validated();
-        $facility = Facility::where('id', $request->id)->first();
+        $facility = Facility::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($facility) {
-            if ($facility->user_id === $request->user()->id) {
-                $facility->update($validated);
+            $facility->update($validated);
 
-                return $this->outputData(['without_data' => 'Facility updated successfully']);
-            } else {
-                return $this->outputError('Forbidden', 403);
-            }
+            return $this->outputData(['without_data' => 'Facility updated successfully']);
         } else {
             return $this->outputData(['without_data' => 'Facility not found']);
         }
@@ -70,16 +58,12 @@ class FacilityController extends Controller
 
     public function destroy(Request $request)
     {
-        $facility = Facility::where('id', $request->id)->first();
+        $facility = Facility::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($facility) {
-            if ($facility->user_id === $request->user()->id) {
-                $facility->delete();
+            $facility->delete();
 
-                return $this->outputData(['without_data' => 'Facility deleted']);
-            } else {
-                return $this->outputError('Forbidden', 403);
-            }
+            return $this->outputData(['without_data' => 'Facility deleted']);
         } else {
             return $this->outputData(['without_data' => 'Facility not found']);
         }

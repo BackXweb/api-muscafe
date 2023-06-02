@@ -146,15 +146,12 @@ class UserController extends Controller
 
     public function show(Request $request)
     {
-        $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', 'LIKE', 'user.%');
-        })->first();
-
-        if ($user) {
-            return $this->outputData(['with_data' => 'User found successfully'], $user);
-        } else {
-            return $this->outputData(['without_data' => 'User not found']);
-        }
+        return $this->outputData(
+            ['with_data' => 'User found successfully', 'without_data' => 'User not found'],
+            User::where('id', $request->id)->whereHas('role', function ($query) {
+                $query->where('name', 'LIKE', 'user.%');
+            })->first()
+        );
     }
 
     public function store(StoreRequest $request)
@@ -212,7 +209,8 @@ class UserController extends Controller
         }
     }
 
-    public function get_user(Request $request) {
+    public function get_user(Request $request)
+    {
         return $this->outputData(['with_data' => 'User data'], User::where('id', $request->user()->id)->with('role')->first());
     }
 }

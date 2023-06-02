@@ -44,4 +44,12 @@ class User extends Authenticatable
     public function facilities() {
         return $this->hasMany(Facility::class, 'user_id');
     }
+
+    public function ads() {
+        return $this->hasMany(Ad::class, 'user_id');
+    }
+
+    public function playlists() {
+        return $this->hasMany(Playlist::class, 'user_id');
+    }
 }

@@ -25,15 +25,12 @@ class ManagerController extends Controller
 
     public function show(Request $request)
     {
-        $user = User::where('id', $request->id)->whereHas('role', function ($query) {
-            $query->where('name', 'manager');
-        })->first();
-
-        if ($user) {
-            return $this->outputData(['with_data' => 'Manager found successfully'], $user);
-        } else {
-            return $this->outputData(['without_data' => 'Manager not found']);
-        }
+        return $this->outputData(
+            ['with_data' => 'Manager found successfully', 'without_data' => 'Manager not found'],
+            User::where('id', $request->id)->whereHas('role', function ($query) {
+                $query->where('name', 'manager');
+            })->first()
+        );
     }
 
     public function store(StoreRequest $request)
