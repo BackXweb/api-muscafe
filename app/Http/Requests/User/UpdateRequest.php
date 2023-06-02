@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
             'login' => ['nullable', 'string', 'min:1', 'max:255'],
             'bitrix_link' => ['nullable', 'string', 'min:1', 'max:255'],
             'name' => ['nullable', 'string', 'min:1', 'max:255'],
-            'subscribe_end' => ['nullable', 'string', 'min:1', 'max:255'],
+            'subscribe_end' => ['nullable', 'date'],
             'status' => ['nullable', 'boolean']
         ];
     }

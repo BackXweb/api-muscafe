@@ -50,6 +50,18 @@ class PlaylistController extends Controller
     public function update(UpdateRequest $request)
     {
         $validated = $request->validated();
+        $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id);
+
+        if ($playlist) {
+            DB::query('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
+            PlaylistToStyle::insert($validated['styles']);
+
+            $playlist->update($validated);
+
+            return $this->outputPaginationData(['with_data' => 'Playlist updated successfully'], $playlist);
+        } else {
+            return $this->outputData(['without_data' => 'Playlists not found']);
+        }
     }
 
     public function destroy(Request $request)

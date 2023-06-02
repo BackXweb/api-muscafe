@@ -24,12 +24,13 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'styles' => ['required', 'array'],
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
-            'styles.*.time' => ['required', 'string', 'min:1', 'max:255'],
+            'styles.*.time' => ['required', 'date'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
-            'time_start' => ['required', 'string', 'min:1', 'max:255'],
-            'time_end' => ['required', 'string', 'min:1', 'max:255'],
+            'time_start' => ['required', 'date'],
+            'time_end' => ['required', 'date'],
         ];
     }
 }

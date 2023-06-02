@@ -24,12 +24,13 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'styles.*.storage_style' => ['required', 'integer', 'min:1'],
+            'styles' => ['required', 'array'],
+            'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
-            'styles.*.time' => ['required', 'string', 'min:1', 'max:255'],
-            'name' => ['required', 'string', 'min:1', 'max:255'],
-            'time_start' => ['required', 'string', 'min:1', 'max:255'],
-            'time_end' => ['required', 'string', 'min:1', 'max:255'],
+            'styles.*.time' => ['required', 'date'],
+            'name' => ['nullable', 'string', 'min:1', 'max:255'],
+            'time_start' => ['nullable', 'date'],
+            'time_end' => ['nullable', 'date'],
         ];
     }
 }

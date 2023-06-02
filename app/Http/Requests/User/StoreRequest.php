@@ -29,7 +29,7 @@ class StoreRequest extends FormRequest
             'login' => ['required', 'string', 'min:1', 'max:255', 'unique:users'],
             'bitrix_link' => ['required', 'string', 'min:1', 'max:255'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
-            'subscribe_end' => ['nullable', 'string', 'min:1', 'max:255'],
+            'subscribe_end' => ['nullable', 'date'],
         ];
     }
 }

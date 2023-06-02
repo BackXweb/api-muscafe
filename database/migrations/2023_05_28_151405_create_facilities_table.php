@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('playlist_id')->references('id')->on('playlists');
             $table->string('name');
             $table->string('address')->nullable();
-            $table->boolean('use_any');
+            $table->boolean('use_any')->default(false);
             $table->timestamps();
         });
     }

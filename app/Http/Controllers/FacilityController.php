@@ -37,8 +37,10 @@ class FacilityController extends Controller
     {
         $validated = $request->validated();
 
-        if ($request->user()->role->name === 'user') {
+        if (in_array('user', $request->user()->currentAccessToken()->abilities)) {
             $validated['user_id'] = $request->user()->id;
+
+            dd($validated);
 
             Facility::create($validated);
 

@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Facility;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -21,12 +23,12 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
             'name' => ['required', 'string', 'min:1', 'max:255'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'use_any' => ['required', 'boolean']
+            'use_any' => ['boolean', Rule::excludeIf(in_array('basic', $request->user()->currentAccessToken()->abilities))],
+            'address' => [Rule::requiredIf($request->use_any === false || in_array('basic', $request->user()->currentAccessToken()->abilities)), Rule::excludeIf($request->use_any === true && !in_array('basic', $request->user()->currentAccessToken()->abilities)), 'string', 'max:255'],
         ];
     }
 }
