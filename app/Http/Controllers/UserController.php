@@ -122,9 +122,7 @@ class UserController extends Controller
                 $query->where('id', request('role_id', 0));
         })->with('manager', function ($query) {
             $query->select(['id', 'name']);
-        })->with('role', function ($query) {
-            $query->select(['id', 'name']);
-        })->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
+        })->with('role')->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
 
         if (!empty($request->status) || $request->status === '0') {
             $query->where('status', $request->status);
