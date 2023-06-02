@@ -15,11 +15,26 @@ class RoleSeeder extends Seeder
     public function run()
     {
         Role::factory()->count(5)->sequence(
-            ['name' => 'admin'],
-            ['name' => 'manager'],
-            ['name' => 'user.basic'],
-            ['name' => 'user.optimal'],
-            ['name' => 'user.professional'],
+            [
+                'name' => 'admin',
+                'full_name' => 'Администратор',
+            ],
+            [
+                'name' => 'manager',
+                'full_name' => 'Менеджер',
+            ],
+            [
+                'name' => 'user.basic',
+                'full_name' => 'Базовый',
+            ],
+            [
+                'name' => 'user.optimal',
+                'full_name' => 'Оптимальный',
+            ],
+            [
+                'name' => 'user.professional',
+                'full_name' => 'Профессиональный',
+            ],
         )->create();
     }
 }
