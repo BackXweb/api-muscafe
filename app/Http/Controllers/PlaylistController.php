@@ -33,12 +33,17 @@ class PlaylistController extends Controller
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
-
         $validated['user_id'] = $request->user()->id;
 
         $playlist = Playlist::create($validated);
 
-        $validated['playlist_id'] = $playlist->id;
+        foreach ($validated['styles'] as $key => $style) {
+            $validated['styles'][$key]['playlist_id'] = $playlist->id;
+        }
+
+        foreach ($validated['ads'] as $key => $ad) {
+            $validated['ads'][$key]['playlist_id'] = $playlist->id;
+        }
 
         PlaylistToStyle::insert($validated['styles']);
         PlaylistToAd::insert($validated['ads']);
