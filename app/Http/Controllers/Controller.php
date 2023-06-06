@@ -38,4 +38,9 @@ class Controller extends BaseController
     {
         return response()->json(['message' => $message], $code);
     }
+
+    protected function checkRole($user, $role)
+    {
+        return in_array($role, $user->currentAccessToken()->abilities);
+    }
 }

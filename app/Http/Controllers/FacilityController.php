@@ -13,7 +13,7 @@ class FacilityController extends Controller
     {
         return $this->outputPaginationData(
             ['with_data' => 'Facilities found successfully', 'without_data' => 'Facilities not found'],
-            in_array('user', $request->user()->currentAccessToken()->abilities) ? Facility::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page) : null
+            Facility::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
         );
     }
 
@@ -21,25 +21,18 @@ class FacilityController extends Controller
     {
         return $this->outputData(
             ['with_data' => 'Facility found successfully', 'without_data' => 'Facility not found'],
-            in_array('user', $request->user()->currentAccessToken()->abilities) ? Facility::where('user_id', $request->user()->id)->where('id', $request->id)->first() : null
+            Facility::where('user_id', $request->user()->id)->where('id', $request->id)->first()
         );
     }
 
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
 
-        if (in_array('user', $request->user()->currentAccessToken()->abilities)) {
-            $validated['user_id'] = $request->user()->id;
+        Facility::create($validated);
 
-            dd($validated);
-
-            Facility::create($validated);
-
-            return $this->outputData(['without_data' => 'Facility create successfully']);
-        } else {
-            return $this->outputError('Forbidden', 403);
-        }
+        return $this->outputData(['without_data' => 'Facility create successfully']);
     }
 
     public function update(UpdateRequest $request)
