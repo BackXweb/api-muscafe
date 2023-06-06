@@ -13,7 +13,7 @@ class FacilityController extends Controller
     {
         return $this->outputPaginationData(
             ['with_data' => 'Facilities found successfully', 'without_data' => 'Facilities not found'],
-            Facility::where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
+            in_array('user', $request->user()->currentAccessToken()->abilities) ? Facility::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page) : null
         );
     }
 
@@ -21,7 +21,7 @@ class FacilityController extends Controller
     {
         return $this->outputData(
             ['with_data' => 'Facility found successfully', 'without_data' => 'Facility not found'],
-            Facility::where('user_id', $request->user()->id)->where('id', $request->id)->where($request->user()->role->name, 'LIKE', 'user.%')->first()
+            in_array('user', $request->user()->currentAccessToken()->abilities) ? Facility::where('user_id', $request->user()->id)->where('id', $request->id)->first() : null
         );
     }
 
