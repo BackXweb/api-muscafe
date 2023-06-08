@@ -41,12 +41,15 @@ class PlaylistController extends Controller
             $validated['styles'][$key]['playlist_id'] = $playlist->id;
         }
 
-        foreach ($validated['ads'] as $key => $ad) {
-            $validated['ads'][$key]['playlist_id'] = $playlist->id;
-        }
-
         PlaylistToStyle::insert($validated['styles']);
-        PlaylistToAd::insert($validated['ads']);
+
+        if (count($validated['ads']) > 0) {
+            foreach ($validated['ads'] as $key => $ad) {
+                $validated['ads'][$key]['playlist_id'] = $playlist->id;
+            }
+
+            PlaylistToAd::insert($validated['ads']);
+        }
 
         return $this->outputData(['without_data' => 'Create playlist successfully']);
     }
@@ -60,8 +63,20 @@ class PlaylistController extends Controller
             DB::query('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
             DB::query('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
 
+            foreach ($validated['styles'] as $key => $style) {
+                $validated['styles'][$key]['playlist_id'] = $playlist->id;
+            }
+
             PlaylistToStyle::insert($validated['styles']);
-            PlaylistToStyle::insert($validated['ads']);
+
+            if (count($validated['ads']) > 0) {
+                foreach ($validated['ads'] as $key => $ad) {
+                    $validated['ads'][$key]['playlist_id'] = $playlist->id;
+                }
+
+                PlaylistToAd::insert($validated['ads']);
+            }
+
             $playlist->update($validated);
 
             return $this->outputPaginationData(['with_data' => 'Playlist updated successfully'], $playlist);

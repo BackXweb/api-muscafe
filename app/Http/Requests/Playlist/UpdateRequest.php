@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
             'styles.*.time' => ['required', 'date'],
-            'ads' => ['required', 'array'],
+            'ads' => ['nullable', 'array'],
             'ads.*.ad_id' => ['required', 'integer', 'exists:ads,id'],
             'ads.*.time' => ['required', 'date'],
             'ads.*.use_any' => ['required', 'boolean'],
