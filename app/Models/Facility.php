@@ -14,7 +14,6 @@ class Facility extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'description',
         'address',
         'use_any',
     ];

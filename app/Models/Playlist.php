@@ -12,6 +12,7 @@ class Playlist extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'description',
         'time_start',
         'time_end',
     ];
