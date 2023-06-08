@@ -26,7 +26,7 @@ class PlaylistController extends Controller
     {
         return $this->outputPaginationData(
             ['with_data' => 'Playlist found successfully', 'without_data' => 'Playlists not found'],
-            Playlist::where('user_id', $request->user()->id)->where('id', $request->id)
+            Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first()
         );
     }
 
@@ -43,7 +43,7 @@ class PlaylistController extends Controller
 
         PlaylistToStyle::insert($validated['styles']);
 
-        if (count($validated['ads']) > 0) {
+        if (isset($validated['ads']) && count($validated['ads']) > 0) {
             foreach ($validated['ads'] as $key => $ad) {
                 $validated['ads'][$key]['playlist_id'] = $playlist->id;
             }
@@ -57,7 +57,7 @@ class PlaylistController extends Controller
     public function update(UpdateRequest $request)
     {
         $validated = $request->validated();
-        $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id);
+        $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($playlist) {
             DB::query('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
@@ -87,7 +87,7 @@ class PlaylistController extends Controller
 
     public function destroy(Request $request)
     {
-        $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id);
+        $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($playlist) {
             DB::query('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
