@@ -33,6 +33,7 @@ class UpdateRequest extends FormRequest
             'ads.*.time' => ['required', 'date'],
             'ads.*.use_any' => ['required', 'boolean'],
             'name' => ['nullable', 'string', 'min:1', 'max:255'],
+            'description' => ['nullable', 'string'],
             'time_start' => ['nullable', 'date'],
             'time_end' => ['nullable', 'date'],
         ];

@@ -33,6 +33,7 @@ class StoreRequest extends FormRequest
             'ads.*.time' => ['required', 'date'],
             'ads.*.use_any' => ['required', 'boolean'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
+            'description' => ['nullable', 'string'],
             'time_start' => ['required', 'date'],
             'time_end' => ['required', 'date'],
         ];
