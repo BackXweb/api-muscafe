@@ -27,15 +27,15 @@ class StoreRequest extends FormRequest
             'styles' => ['required', 'array'],
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
-            'styles.*.time' => ['required', 'date'],
+            'styles.*.time' => ['required', 'string', 'min:8', 'max:8'],
             'ads' => ['nullable', 'array'],
-//            'ads.*.ad_id' => ['required', 'integer', 'exists:ads,id'],
-//            'ads.*.time' => ['required', 'date'],
-//            'ads.*.use_any' => ['required', 'boolean'],
+            'ads.*.ad_id' => ['required', 'integer', 'exists:ads,id'],
+            'ads.*.time' => ['required', 'string', 'min:8', 'max:8'],
+            'ads.*.use_any' => ['required', 'boolean'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'description' => ['nullable', 'string'],
-            'time_start' => ['required', 'date'],
-            'time_end' => ['required', 'date'],
+            'time_start' => ['required', 'string', 'min:8', 'max:8'],
+            'time_end' => ['required', 'string', 'min:8', 'max:8'],
         ];
     }
 }
