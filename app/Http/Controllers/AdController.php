@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 class AdController extends Controller
 {
     public function index(Request $request) {
-        $query = Ad::where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
+        $query = Ad::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
 
         return $this->outputPaginationData(
             ['with_data' => 'Ads found successfully', 'without_data' => 'Ads not found'],
@@ -23,7 +23,7 @@ class AdController extends Controller
     public function show(Request $request) {
         return $this->outputData(
             ['with_data' => 'Ad found successfully', 'without_data' => 'Ad not found'],
-            Ad::where('id', $request->id)->where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->first()
+            Ad::where('id', $request->id)->where('user_id', $request->user()->id)->first()
         );
     }
 
@@ -42,7 +42,7 @@ class AdController extends Controller
 
     public function update(UpdateRequest $request) {
         $validated = $request->validated();
-        $ad = Ad::where('id', $request->id)->where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->first();
+        $ad = Ad::where('id', $request->id)->where('user_id', $request->user()->id)->first();
 
         if ($ad) {
             $ad->update($validated);
@@ -54,7 +54,7 @@ class AdController extends Controller
     }
 
     public function destroy(Request $request) {
-        $ad = Ad::where('id', $request->id)->where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->first();
+        $ad = Ad::where('id', $request->id)->where('user_id', $request->user()->id)->first();
 
         if ($ad) {
             DB::delete('DELETE FROM playlist_to_ad WHERE ad_id = ' . $ad->id);
