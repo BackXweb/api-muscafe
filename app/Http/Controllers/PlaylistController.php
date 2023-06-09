@@ -24,7 +24,7 @@ class PlaylistController extends Controller
 
     public function show(Request $request)
     {
-        return $this->outputPaginationData(
+        return $this->outputData(
             ['with_data' => 'Playlist found successfully', 'without_data' => 'Playlists not found'],
             Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first()
         );
