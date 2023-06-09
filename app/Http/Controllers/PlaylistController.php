@@ -90,12 +90,12 @@ class PlaylistController extends Controller
         $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($playlist) {
-            DB::query('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
-            DB::query('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
+            DB::delete('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
+            DB::delete('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
 
             $playlist->delete();
 
-            return $this->outputPaginationData(['with_data' => 'Playlist deleted successfully'], $playlist);
+            return $this->outputData(['without_data' => 'Playlist deleted successfully']);
         } else {
             return $this->outputData(['without_data' => 'Playlists not found']);
         }

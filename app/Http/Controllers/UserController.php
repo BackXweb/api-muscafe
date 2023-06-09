@@ -200,7 +200,7 @@ class UserController extends Controller
         })->first();
 
         if ($user) {
-            DB::query('DELETE FROM personal_access_tokens WHERE name = ' . $user->login);
+            DB::delete('DELETE FROM personal_access_tokens WHERE name = ' . $user->login);
             $user->delete();
 
             return $this->outputData(['without_data' => 'User deleted']);

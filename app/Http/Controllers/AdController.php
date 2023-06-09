@@ -57,7 +57,7 @@ class AdController extends Controller
         $ad = Ad::where('id', $request->id)->where('user_id', $request->user()->id)->where($request->user()->role->name, 'LIKE', 'user.%')->first();
 
         if ($ad) {
-            DB::query('DELETE FROM playlist_to_ad WHERE ad_id = ' . $ad->id);
+            DB::delete('DELETE FROM playlist_to_ad WHERE ad_id = ' . $ad->id);
             $ad->delete();
 
             return $this->outputData(['without_data' => 'Ad deleted successfully']);
