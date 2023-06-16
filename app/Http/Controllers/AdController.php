@@ -35,7 +35,7 @@ class AdController extends Controller
         if ($validated['storage'] !== false) {
             Ad::create($validated);
 
-            return $this->outputData(['with_data' => 'Ad created successfully']);
+            return $this->outputData(['without_data' => 'Ad created successfully']);
         } else {
             return $this->outputError('Failed upload file', 500);
         }
