@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Playlist\StoreRequest;
 use App\Http\Requests\Playlist\UpdateRequest;
+use App\Models\Ad;
 use App\Models\Playlist;
 use App\Models\PlaylistToAd;
 use App\Models\PlaylistToStyle;
@@ -24,10 +25,22 @@ class PlaylistController extends Controller
 
     public function show(Request $request)
     {
-        return $this->outputData(
-            ['with_data' => 'Playlist found successfully', 'without_data' => 'Playlists not found'],
-            Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first()
-        );
+        $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
+
+        if ($playlist) {
+            return $this->outputData(
+                ['with_data' => 'Playlist found successfully'],
+                [
+                    'playlist' => $playlist,
+                    'styles' => PlaylistToStyle::where('playlist_id', $playlist->id)->get(),
+                    'ads' => Ad::whereHas('playlist_to_ad', function ($query) use ($playlist) {
+                        $query->where('playlist_id', $playlist->id);
+                    })->get(),
+                ]
+            );
+        } else {
+            return $this->outputData(['without_data' => 'Playlist not found']);
+        }
     }
 
     public function store(StoreRequest $request)

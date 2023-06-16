@@ -18,18 +18,18 @@ class Playlist extends Model
     ];
 
     public function playlist_to_style() {
-        $this->hasMany(PlaylistToStyle::class, 'playlist_id');
+        return $this->hasMany(PlaylistToStyle::class, 'playlist_id');
     }
 
     public function user() {
-        $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function playlist_to_ad() {
-        $this->hasMany(PlaylistToAd::class, 'playlist_id');
+        return $this->hasMany(PlaylistToAd::class, 'playlist_id');
     }
 
     public function facilities() {
-        $this->hasMany(Facility::class, 'playlist_id');
+        return $this->hasMany(Facility::class, 'playlist_id');
     }
 }

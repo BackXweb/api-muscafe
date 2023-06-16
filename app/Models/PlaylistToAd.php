@@ -17,10 +17,10 @@ class PlaylistToAd extends Model
     ];
 
     public function playlist() {
-        $this->belongsTo(Playlist::class, 'playlist_id');
+        return $this->belongsTo(Playlist::class, 'playlist_id');
     }
 
     public function ad() {
-        $this->belongsTo(Ad::class, 'ad_id');
+        return $this->belongsTo(Ad::class, 'ad_id');
     }
 }

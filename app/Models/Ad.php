@@ -16,10 +16,10 @@ class Ad extends Model
     ];
 
     public function user() {
-        $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function playlist_to_ad() {
-        $this->hasMany(PlaylistToAd::class, 'ad_id');
+        return $this->hasMany(PlaylistToAd::class, 'ad_id');
     }
 }
