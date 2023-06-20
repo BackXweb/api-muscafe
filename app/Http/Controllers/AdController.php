@@ -34,7 +34,7 @@ class AdController extends Controller
 
     public function store(StoreRequest $request) {
         $validated = $request->validated();
-        $validated['storage'] = Storage::putFile('ads/' . $request->user()->id, $request->file('file'));
+        $validated['storage'] = Storage::putFile('/ads/' . $request->user()->id, $request->file('file'), 'public');
         $validated['user_id'] = $request->user()->id;
 
         if ($validated['storage'] !== false) {
