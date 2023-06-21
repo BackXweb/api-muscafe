@@ -6,7 +6,6 @@ use App\Http\Requests\Playlist\StoreRequest;
 use App\Http\Requests\Playlist\UpdateRequest;
 use App\Models\Ad;
 use App\Models\Playlist;
-use App\Models\PlaylistToAd;
 use App\Models\PlaylistToStyle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,18 +49,10 @@ class PlaylistController extends Controller
 
         $playlist = Playlist::create($validated);
 
-        foreach ($validated['styles'] as $key => $style) {
-            $validated['styles'][$key]['playlist_id'] = $playlist->id;
-        }
-
-        PlaylistToStyle::insert($validated['styles']);
+        $playlist->playlist_to_style()->createMany($validated['styles']);
 
         if (isset($validated['ads']) && count($validated['ads']) > 0) {
-            foreach ($validated['ads'] as $key => $ad) {
-                $validated['ads'][$key]['playlist_id'] = $playlist->id;
-            }
-
-            PlaylistToAd::insert($validated['ads']);
+            $playlist->playlist_to_ad()->createMany($validated['ads']);
         }
 
         return $this->outputData(['without_data' => 'Create playlist successfully']);
@@ -73,21 +64,13 @@ class PlaylistController extends Controller
         $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($playlist) {
-            DB::query('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
-            DB::query('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
+            DB::delete('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
+            DB::delete('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
 
-            foreach ($validated['styles'] as $key => $style) {
-                $validated['styles'][$key]['playlist_id'] = $playlist->id;
-            }
-
-            PlaylistToStyle::insert($validated['styles']);
+            $playlist->playlist_to_style()->createMany($validated['styles']);
 
             if (count($validated['ads']) > 0) {
-                foreach ($validated['ads'] as $key => $ad) {
-                    $validated['ads'][$key]['playlist_id'] = $playlist->id;
-                }
-
-                PlaylistToAd::insert($validated['ads']);
+                $playlist->playlist_to_ad()->createMany($validated['ads']);
             }
 
             $playlist->update($validated);

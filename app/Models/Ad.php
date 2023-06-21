@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Ad extends Model
 {
@@ -14,6 +15,10 @@ class Ad extends Model
         'name',
         'storage'
     ];
+
+    public function getStorageAttribute($value) {
+        return Storage::url($value);
+    }
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');

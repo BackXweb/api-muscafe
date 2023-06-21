@@ -6,6 +6,7 @@ use App\Http\Requests\User\ResetPasswordRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
@@ -200,7 +201,13 @@ class UserController extends Controller
         })->first();
 
         if ($user) {
+            Storage::delete('public/ads/' . $user->id);
+
+            DB::delete('DELETE playlist_to_ad, ads FROM playlist_to_ad LEFT JOIN ads WHERE user_id = ' . $user->id);
+            DB::delete('DELETE playlist_to_style, playlists FROM playlist_to_style LEFT JOIN playlists WHERE user_id = ' . $user->id);
+            DB::delete('DELETE FROM facilities WHERE user_id = ' . $user->id);
             DB::delete('DELETE FROM personal_access_tokens WHERE name = ' . $user->login);
+
             $user->delete();
 
             return $this->outputData(['without_data' => 'User deleted']);

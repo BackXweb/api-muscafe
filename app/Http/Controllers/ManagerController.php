@@ -86,6 +86,7 @@ class ManagerController extends Controller
                 return $this->outputData(['without_data' => 'You cannot delete the manager you are logged in as']);
             } else {
                 DB::delete('DELETE FROM personal_access_tokens WHERE name = ' . $user->login);
+
                 $user->delete();
 
                 return $this->outputData(['without_data' => 'Manager deleted']);
