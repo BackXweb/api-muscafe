@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Playlist;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -21,21 +23,21 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
             'styles' => ['required', 'array'],
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
-            'styles.*.time' => ['required', 'string', 'min:8', 'max:8'],
-            'ads' => ['nullable', 'array'],
+            'styles.*.time' => ['required', 'date', 'date_format:H:i:s'],
+            'ads' => [Rule::requiredIf(count($request->ads) > 0), 'array'],
             'ads.*.ad_id' => ['required', 'integer', 'exists:ads,id'],
-            'ads.*.time' => ['required', 'string', 'min:8', 'max:8'],
+            'ads.*.time' => ['required', 'date', 'date_format:H:i:s'],
             'ads.*.use_any' => ['required', 'boolean'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'description' => ['nullable', 'string'],
-            'time_start' => ['required', 'string', 'min:8', 'max:8'],
-            'time_end' => ['required', 'string', 'min:8', 'max:8'],
+            'time_start' => ['required', 'date', 'date_format:H:i:s'],
+            'time_end' => ['required', 'date', 'date_format:H:i:s'],
         ];
     }
 }
