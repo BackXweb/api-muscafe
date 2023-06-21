@@ -29,15 +29,15 @@ class UpdateRequest extends FormRequest
             'styles' => ['required', 'array'],
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
-            'styles.*.time' => ['required', 'date', 'date_format:H:i:s'],
-            'ads' => [Rule::requiredIf(count($request->ads) > 0), 'array'],
-            'ads.*.ad_id' => ['required', 'integer', 'exists:ads,id'],
-            'ads.*.time' => ['required', 'date', 'date_format:H:i:s'],
-            'ads.*.use_any' => ['required', 'boolean'],
+            'styles.*.time' => ['required', 'date_format:H:i:s'],
+            'ads' => ['required', 'array'],
+            'ads.*.ad_id' => [Rule::requiredIf(count($request->ads) > 0), 'integer', 'exists:ads,id'],
+            'ads.*.time' => [Rule::requiredIf(count($request->ads) > 0), 'date_format:H:i:s'],
+            'ads.*.use_any' => [Rule::requiredIf(count($request->ads) > 0), 'boolean'],
             'name' => ['nullable', 'string', 'min:1', 'max:255'],
             'description' => ['nullable', 'string'],
-            'time_start' => ['nullable', 'date', 'date_format:H:i:s'],
-            'time_end' => ['nullable', 'date', 'date_format:H:i:s'],
+            'time_start' => ['nullable', 'date_format:H:i:s'],
+            'time_end' => ['nullable', 'date_format:H:i:s'],
         ];
     }
 }
