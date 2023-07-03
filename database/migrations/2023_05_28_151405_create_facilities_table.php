@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('address')->nullable();
             $table->boolean('use_any')->default(false);
-            $table->string('token')->nullable();
+            $table->string('token', 256)->nullable();
             $table->timestamps();
         });
     }

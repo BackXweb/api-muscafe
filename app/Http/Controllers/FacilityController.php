@@ -40,7 +40,7 @@ class FacilityController extends Controller
 
         $facility = Facility::create($validated);
 
-        $validated['token'] = Crypt::encryptString($facility->createToken($request->user()->login . '_facility_' . $facility->id, 'player')->plainTextToken);
+        $validated['token'] = Crypt::encryptString($facility->createToken($request->user()->login . '_facility_' . $facility->id, ['player'])->plainTextToken);
 
         $facility->update($validated);
 
