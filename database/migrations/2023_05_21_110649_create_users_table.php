@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('status')->default(true);
             $table->timestamp("last_online_at")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

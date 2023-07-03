@@ -6,7 +6,6 @@ use App\Http\Requests\Ad\StoreRequest;
 use App\Http\Requests\Ad\UpdateRequest;
 use App\Models\Ad;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class AdController extends Controller
@@ -53,7 +52,8 @@ class AdController extends Controller
         $ad = Ad::where('id', $request->id)->where('user_id', $request->user()->id)->first();
 
         if ($ad) {
-            DB::delete('DELETE FROM playlist_to_ad WHERE ad_id = ' . $ad->id);
+            Storage::delete($ad->storage);
+            $ad->playlist_to_ad()->delete();
             $ad->delete();
 
             return $this->outputData(['without_data' => 'Ad deleted successfully']);

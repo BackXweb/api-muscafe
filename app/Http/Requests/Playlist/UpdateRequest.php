@@ -30,7 +30,7 @@ class UpdateRequest extends FormRequest
             'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
             'styles.*.time' => ['required', 'date_format:H:i:s'],
-            'ads' => ['required', 'array'],
+            'ads' => [Rule::requiredIf(count($request->ads) > 0), 'array'],
             'ads.*.ad_id' => ['required', 'integer', 'exists:ads,id'],
             'ads.*.time' => ['required', 'date_format:H:i:s'],
             'ads.*.use_any' => ['required', 'boolean'],

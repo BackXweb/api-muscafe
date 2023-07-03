@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Facility extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory;
 
     protected $table = 'facilities';
 
@@ -16,6 +17,7 @@ class Facility extends Model
         'name',
         'address',
         'use_any',
+        'token',
     ];
 
     public function user() {

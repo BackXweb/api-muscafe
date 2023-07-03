@@ -8,7 +8,7 @@ use App\Models\Ad;
 use App\Models\Playlist;
 use App\Models\PlaylistToStyle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PlaylistController extends Controller
 {
@@ -25,13 +25,24 @@ class PlaylistController extends Controller
     public function show(Request $request)
     {
         $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
+        $styles = [];
 
         if ($playlist) {
+            foreach (PlaylistToStyle::where('playlist_id', $playlist->id)->get() as $key => $style) {
+                if (Storage::exists($style->storage)) {
+                    $styles[$key]['style'] = $style;
+
+                    foreach (Storage::files($style->storage . '/music') as $music) {
+                        $styles[$key]['musics'][] = Storage::url($music);
+                    }
+                }
+            }
+
             return $this->outputData(
                 ['with_data' => 'Playlist found successfully'],
                 [
                     'playlist' => $playlist,
-                    'styles' => PlaylistToStyle::where('playlist_id', $playlist->id)->get(),
+                    'styles' => $styles,
                     'ads' => Ad::whereHas('playlist_to_ad', function ($query) use ($playlist) {
                         $query->where('playlist_id', $playlist->id);
                     })->get(),
@@ -64,8 +75,8 @@ class PlaylistController extends Controller
         $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($playlist) {
-            DB::delete('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
-            DB::delete('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
+            $playlist->playlist_to_ad()->delete();
+            $playlist->playlist_to_style()->delete();
 
             $playlist->playlist_to_style()->createMany($validated['styles']);
 
@@ -86,8 +97,10 @@ class PlaylistController extends Controller
         $playlist = Playlist::where('user_id', $request->user()->id)->where('id', $request->id)->first();
 
         if ($playlist) {
-            DB::delete('DELETE FROM playlist_to_style WHERE playlist_id = ' . $playlist->id);
-            DB::delete('DELETE FROM playlist_to_ad WHERE playlist_id = ' . $playlist->id);
+            $playlist->playlist_to_ad()->delete();
+            $playlist->playlist_to_style()->delete();
+
+            $playlist->facilities()->update(['playlist_id' => NULL]);
 
             $playlist->delete();
 
