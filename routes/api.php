@@ -87,6 +87,10 @@ Route::prefix('/ad')->middleware(['auth:sanctum', 'abilities:user'])->controller
     Route::delete('/destroy', 'destroy');
 });
 
-Route::prefix('/player')->middleware(['auth:sanctum', 'abilities:player'])->controller(PlayerController::class)->group(function () {
-    Route::get('/show', 'show');
+Route::prefix('/player')->controller(PlayerController::class)->group(function () {
+    Route::get('/check-token', 'check_token');
+
+    Route::middleware(['auth:sanctum', 'abilities:player'])->group(function () {
+        Route::get('/show', 'show');
+    });
 });

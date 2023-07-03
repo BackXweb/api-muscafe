@@ -7,6 +7,7 @@ use App\Models\Playlist;
 use App\Models\PlaylistToStyle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class PlayerController extends Controller
 {
@@ -38,5 +39,9 @@ class PlayerController extends Controller
         } else {
             return $this->outputData(['without_data' => 'Playlist not found']);
         }
+    }
+
+    public function check_token(Request $request) {
+        return $this->outputData(['with_data' => 'Token found successfully', 'without_data' => 'Token not found'], PersonalAccessToken::findToken($request->token));
     }
 }
