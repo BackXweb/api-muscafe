@@ -32,7 +32,7 @@ class PlaylistController extends Controller
                 if (Storage::exists(str_replace('/storage', '/public', $style->storage_style))) {
                     $styles[$key]['style'] = $style;
 
-                    foreach (Storage::files($style->storage . '/music') as $music) {
+                    foreach (Storage::files(str_replace('/storage', '/public', $style->storage_style) . '/music') as $music) {
                         $styles[$key]['musics'][] = Storage::url($music);
                     }
                 }
