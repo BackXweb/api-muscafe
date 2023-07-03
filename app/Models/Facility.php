@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Sanctum\HasApiTokens;
 
 class Facility extends Model
@@ -19,6 +20,10 @@ class Facility extends Model
         'use_any',
         'token',
     ];
+
+    public function getTokenAttribute($value) {
+        return Crypt::decryptString($value);
+    }
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');

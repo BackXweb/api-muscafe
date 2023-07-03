@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\ResetPasswordRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
@@ -23,9 +24,16 @@ class UserController extends Controller
 
         if ($user && Hash::check($validated['password'], $user->password)) {
             if (($user->status && ($user->role->name === 'manager' || empty($user->subscribe_end))) || ($user->status && $user->subscribe_end > date('Y-m-d'))) {
+                if ($user->token) {
+                    $token = $user->token;
+                } else {
+                    $token = $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken;
+                    $user->update(['token' => Crypt::encryptString($token)]);
+                }
+
                 return $this->outputData(
-                    ['with_data' => 'Login success'],
-                    ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                    ['with_data' => 'Password reset successfully'],
+                    ['token' => $token, 'role' => $user->role->name, 'name' => $user->name]
                 );
             } else {
                 return $this->outputError('Login denied', 403);
@@ -40,11 +48,18 @@ class UserController extends Controller
         $user = User::where('id', $request->id)->with('role')->first();
 
         if ($user) {
-            $request->user()->currentAccessToken()->delete();
+            $request->user()->tokens()->delete();
+
+            if ($user->token) {
+                $token = $user->token;
+            } else {
+                $token = $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken;
+                $user->update(['token' => Crypt::encryptString($token)]);
+            }
 
             return $this->outputData(
-                ['with_data' => 'Login success'],
-                ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                ['with_data' => 'Password reset successfully'],
+                ['token' => $token, 'role' => $user->role->name, 'name' => $user->name]
             );
         } else {
             return $this->outputData(['without_data' => 'User not found']);
@@ -91,14 +106,17 @@ class UserController extends Controller
         })->where('reset_token', $request->reset_token)->with('role')->first();
 
         if ($user) {
-            $validated['reset_token'] = null;
+            $user->tokens()->delete();
+
+            $validated['reset_token'] = NULL;
             $validated['password'] = Hash::make($validated['password']);
+            $validated['token'] = Crypt::encryptString($user->createToken($user->login, explode('.', $user->role->name))->plainTextToken);
 
             $user->update($validated);
 
             return $this->outputData(
                 ['with_data' => 'Password reset successfully'],
-                ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                ['token' => $validated['token'], 'role' => $user->role->name, 'name' => $user->name]
             );
         } else {
             return $this->outputData(['without_data' => 'User not found']);
@@ -107,7 +125,8 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        User::where('id', $request->user()->id)->update(['token' => NULL]);
+        $request->user()->tokens()->delete();
 
         return $this->outputData(['without_data' => 'Logout success']);
     }

@@ -43,4 +43,8 @@ class Controller extends BaseController
     {
         return in_array($role, $user->currentAccessToken()->abilities);
     }
+
+    protected function storageUrlToPath($url) {
+        return str_replace('/storage', '/public', $url);
+    }
 }

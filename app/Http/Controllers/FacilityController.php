@@ -12,16 +12,9 @@ class FacilityController extends Controller
 {
     public function index(Request $request)
     {
-        $facilities = [];
-
-        foreach (Facility::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page) as $key => $facility) {
-            $facilities[$key] = $facility;
-            $facilities[$key]['token'] = Crypt::decryptString($facilities[$key]['token']);
-        }
-
         return $this->outputPaginationData(
             ['with_data' => 'Facilities found successfully', 'without_data' => 'Facilities not found'],
-            $facilities
+            Facility::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
         );
     }
 

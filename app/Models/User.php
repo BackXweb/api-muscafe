@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -24,11 +25,16 @@ class User extends Authenticatable
         'subscribe_end',
         'status',
         'reset_token',
+        'token'
     ];
 
     protected $hidden = ['password'];
 
     protected $casts = ["last_online_at" => "datetime"];
+
+    public function getTokenAttribute($value) {
+        return Crypt::decryptString($value);
+    }
 
     public function role() {
         return $this->belongsTo(Role::class, 'role_id');

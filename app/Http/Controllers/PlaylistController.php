@@ -14,11 +14,9 @@ class PlaylistController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Playlist::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
-
         return $this->outputPaginationData(
             ['with_data' => 'Playlists found successfully', 'without_data' => 'Playlists not found'],
-            $query->paginate((int)request('per_page', 15))
+            Playlist::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)request('per_page', 15))
         );
     }
 
@@ -29,10 +27,10 @@ class PlaylistController extends Controller
 
         if ($playlist) {
             foreach (PlaylistToStyle::where('playlist_id', $playlist->id)->get() as $key => $style) {
-                if (Storage::exists(str_replace('/storage', '/public', $style->storage_style))) {
+                if (Storage::exists($this->storageUrlToPath($style->storage_style))) {
                     $styles[$key]['style'] = $style;
 
-                    foreach (Storage::files(str_replace('/storage', '/public', $style->storage_style) . '/music') as $music) {
+                    foreach (Storage::files($this->storageUrlToPath($style->storage_style) . '/music') as $music) {
                         $styles[$key]['musics'][] = Storage::url($music);
                     }
                 }
@@ -43,7 +41,7 @@ class PlaylistController extends Controller
                 [
                     'playlist' => $playlist,
                     'styles' => $styles,
-                    'ads' => Ad::whereHas('playlist_to_ad', function ($query) use ($playlist) {
+                    'ads' => Ad::with('playlist_to_ad', function ($query) use ($playlist) {
                         $query->where('playlist_id', $playlist->id);
                     })->get(),
                 ]
