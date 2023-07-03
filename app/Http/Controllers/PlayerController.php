@@ -42,6 +42,10 @@ class PlayerController extends Controller
     }
 
     public function check_token(Request $request) {
-        return $this->outputData(['with_data' => 'Token found successfully', 'without_data' => 'Token not found'], PersonalAccessToken::findToken($request->token)->tokenable());
+        if (PersonalAccessToken::findToken($request->token)) {
+            return response()->json(['message' => 'Token found successfully', 'data' => true]);
+        } else {
+            return response()->json(['message' => 'Token not found', 'data' => false]);
+        }
     }
 }
