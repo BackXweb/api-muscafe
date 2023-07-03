@@ -12,7 +12,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 class PlayerController extends Controller
 {
     public function show(Request $request) {
-        $playlist = Playlist::where('id', $request->facility()->playlist_id)->first();
+        $playlist = Playlist::where('id', $request->user()->playlist_id)->first();
         $styles = [];
 
         if ($playlist) {
