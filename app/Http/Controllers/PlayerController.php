@@ -31,9 +31,9 @@ class PlayerController extends Controller
                 [
                     'playlist' => $playlist,
                     'styles' => $styles,
-                    'ads' => Ad::with('playlist_to_ad', function ($query) use ($playlist) {
+                    'ads' => Ad::whereHas('playlist_to_ad', function ($query) use ($playlist) {
                         $query->where('playlist_id', $playlist->id);
-                    })->get(),
+                    })->with('playlist_to_ad')->get(),
                 ]
             );
         } else {
