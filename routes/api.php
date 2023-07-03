@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlayerController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
@@ -84,4 +85,8 @@ Route::prefix('/ad')->middleware(['auth:sanctum', 'abilities:user'])->controller
     Route::get('/show', 'show');
     Route::post('/update', 'update');
     Route::delete('/destroy', 'destroy');
+});
+
+Route::prefix('/player')->middleware(['auth:sanctum', 'abilities:player'])->controller(PlayerController::class)->group(function () {
+    Route::get('/show', 'show');
 });
