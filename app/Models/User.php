@@ -32,10 +32,6 @@ class User extends Authenticatable
 
     protected $casts = ["last_online_at" => "datetime"];
 
-    public function getTokenAttribute($value) {
-        return Crypt::decryptString($value);
-    }
-
     public function role() {
         return $this->belongsTo(Role::class, 'role_id');
     }

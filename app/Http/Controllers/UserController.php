@@ -25,7 +25,7 @@ class UserController extends Controller
         if ($user && Hash::check($validated['password'], $user->password)) {
             if (($user->status && ($user->role->name === 'manager' || empty($user->subscribe_end))) || ($user->status && $user->subscribe_end > date('Y-m-d'))) {
                 if ($user->token) {
-                    $token = $user->token;
+                    $token = Crypt::decryptString($user->token);
                 } else {
                     $token = $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken;
                     $user->update(['token' => Crypt::encryptString($token)]);
@@ -51,7 +51,7 @@ class UserController extends Controller
             $request->user()->tokens()->delete();
 
             if ($user->token) {
-                $token = $user->token;
+                $token = Crypt::decryptString($user->token);
             } else {
                 $token = $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken;
                 $user->update(['token' => Crypt::encryptString($token)]);
