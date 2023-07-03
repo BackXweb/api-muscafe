@@ -29,7 +29,7 @@ class PlaylistController extends Controller
 
         if ($playlist) {
             foreach (PlaylistToStyle::where('playlist_id', $playlist->id)->get() as $key => $style) {
-                if (Storage::exists($style->storage)) {
+                if (Storage::exists(str_replace('/storage', '/public', $style->storage_style))) {
                     $styles[$key]['style'] = $style;
 
                     foreach (Storage::files($style->storage . '/music') as $music) {

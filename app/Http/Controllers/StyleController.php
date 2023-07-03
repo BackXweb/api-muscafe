@@ -60,7 +60,7 @@ class StyleController extends Controller
             }
         }
 
-        if (!isset($json) && !empty($request->storage) && Storage::exists($request->storage)) {
+        if (!isset($json) && !empty($request->storage) && Storage::exists(str_replace('/storage', '/public', $request->storage))) {
             foreach (Storage::files($request->storage . '/music') as $music) {
                 $json[] = Storage::url($music);
             }
