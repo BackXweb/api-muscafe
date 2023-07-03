@@ -27,7 +27,6 @@ return new class extends Migration
             $table->timestamp('subscribe_end')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamp('last_online_at')->nullable();
-            $table->string('token', 256)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
