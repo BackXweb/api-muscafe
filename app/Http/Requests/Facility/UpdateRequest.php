@@ -24,6 +24,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'playlist_id' => ['nullable', 'integer', 'exists:playlists,id'],
             'name' => ['nullable', 'string', 'min:1', 'max:255'],
             'address' => ['nullable', 'string', 'min:1', 'max:255'],
             'use_any' => ['nullable', 'boolean']
