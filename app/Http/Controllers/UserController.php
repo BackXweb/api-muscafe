@@ -32,7 +32,7 @@ class UserController extends Controller
                 }
 
                 return $this->outputData(
-                    ['with_data' => 'Password reset successfully'],
+                    ['with_data' => 'Login successfully'],
                     ['token' => $token, 'role' => $user->role->name, 'name' => $user->name]
                 );
             } else {
@@ -58,7 +58,7 @@ class UserController extends Controller
             }
 
             return $this->outputData(
-                ['with_data' => 'Password reset successfully'],
+                ['with_data' => 'Login successfully'],
                 ['token' => $token, 'role' => $user->role->name, 'name' => $user->name]
             );
         } else {
