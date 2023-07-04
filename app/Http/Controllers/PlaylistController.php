@@ -84,7 +84,7 @@ class PlaylistController extends Controller
 
             $playlist->update($validated);
 
-            return $this->outputPaginationData(['with_data' => 'Playlist updated successfully'], $playlist);
+            return $this->outputData(['without_data' => 'Playlist updated successfully']);
         } else {
             return $this->outputData(['without_data' => 'Playlists not found']);
         }
