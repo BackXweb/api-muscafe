@@ -110,8 +110,7 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        User::where('id', $request->user()->id)->update(['token' => NULL]);
-        $request->user()->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
 
         return $this->outputData(['without_data' => 'Logout success']);
     }
