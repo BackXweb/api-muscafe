@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'styles' => ['required', 'array'],
-            'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:255'],
+            'styles.*.storage_style' => ['required', 'string', 'min:1', 'max:1024'],
             'styles.*.chance' => ['required', 'integer', 'min:1', 'max:100'],
             'styles.*.time' => ['required', 'date_format:H:i:s'],
             'ads' => [Rule::requiredIf(count($request->ads) > 0), 'array'],

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('playlist_id');
             $table->foreign('playlist_id')->references('id')->on('playlists');
-            $table->string('storage_style');
+            $table->string('storage_style', 1024);
             $table->unsignedInteger('chance');
             $table->time('time');
             $table->timestamps();

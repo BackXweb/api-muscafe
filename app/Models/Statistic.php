@@ -11,6 +11,7 @@ class Statistic extends Model
     protected $fillable = [
         'facility_id',
         'storage_music',
+        'is_ad',
     ];
 
     public function facility() {

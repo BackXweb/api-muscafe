@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'storage_music' => ['required', 'string', 'min:1', 'max:1024'],
+            'is_ad' => ['required', 'boolean']
         ];
     }
 }
