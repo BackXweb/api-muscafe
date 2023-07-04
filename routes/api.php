@@ -10,6 +10,7 @@ use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\StyleController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdController;
+use App\Http\Controllers\StatisticController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,4 +93,8 @@ Route::prefix('/player')->controller(PlayerController::class)->group(function ()
     Route::middleware(['auth:sanctum', 'abilities:player'])->group(function () {
         Route::get('/show', 'show');
     });
+});
+
+Route::prefix('/player')->middleware(['auth:sanctum', 'abilities:player'])->controller(StatisticController::class)->group(function () {
+    Route::post('/store', 'store');
 });

@@ -32,4 +32,8 @@ class Facility extends Model
     public function playlist() {
         return $this->belongsTo(Playlist::class, 'playlist_id');
     }
+
+    public function statistics() {
+        return $this->hasMany(Statistic::class, 'facility_id');
+    }
 }

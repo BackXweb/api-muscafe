@@ -60,6 +60,7 @@ class FacilityController extends Controller
 
         if ($facility) {
             $facility->tokens()->delete();
+            $facility->statistics()->delete();
             $facility->delete();
 
             return $this->outputData(['without_data' => 'Facility deleted']);
