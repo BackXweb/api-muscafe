@@ -12,7 +12,7 @@ class StatisticController extends Controller
     public function index(Request $request) {
         return $this->outputData(
             ['with_data' => 'Statistics found successfully', 'without_data' => 'Statistics not found'],
-            Statistic::where('facility_id', $request->user()->id)->whereDate('created_at', '<=', request('date-start', Carbon::today()->format('Y-m-d H:i:s')))->whereDate('created_at', '>=', request('date-end', Carbon::yesterday()->format('Y-m-d H:i:s')))->orderBy('created_at', 'asc')->get()
+            Statistic::where('facility_id', $request->id)->whereDate('created_at', '<=', request('date-start', Carbon::today()->format('Y-m-d H:i:s')))->whereDate('created_at', '>=', request('date-end', Carbon::yesterday()->format('Y-m-d H:i:s')))->orderBy('created_at', 'asc')->get()
         );
     }
 
