@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'storage_music' => ['required', 'string', 'min:1', 'max:255'],
+            'storage_music' => ['required', 'string', 'min:1', 'max:1024'],
         ];
     }
 }

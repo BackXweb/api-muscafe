@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('facility_id');
             $table->foreign('facility_id')->references('id')->on('facilities');
-            $table->string('storage_music');
+            $table->string('storage_music', 1024);
             $table->timestamps();
         });
     }
