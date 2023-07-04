@@ -41,8 +41,8 @@ class PlaylistController extends Controller
                 [
                     'playlist' => $playlist,
                     'styles' => $styles,
-                    'ads' => Ad::with(['playlist_to_ad' => function ($query) use ($playlist) {
-                        $query->where('playlist_id', $playlist->id);
+                    'ads' => $playlist->ads()->with(['playlist_to_ad' => function ($query) use ($request) {
+                        $query->where('playlist_id', $request->id);
                     }])->get(),
                 ]
             );

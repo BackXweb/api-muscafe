@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Playlist extends Model
 {
+    protected $hidden = ['pivot'];
+
     protected $table = 'playlists';
 
     protected $fillable = [
@@ -23,6 +25,10 @@ class Playlist extends Model
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function ads() {
+        return $this->belongsToMany(Ad::class, 'playlist_to_ad')->using(PlaylistToAd::class);
     }
 
     public function playlist_to_ad() {

@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PlaylistToAd extends Model
+class PlaylistToAd extends Pivot
 {
+    protected $hidden = ['pivot'];
+
     protected $table = 'playlist_to_ad';
 
     protected $fillable = [

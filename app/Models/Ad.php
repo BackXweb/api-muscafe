@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Ad extends Model
 {
+    protected $hidden = ['pivot'];
+
     protected $table = 'ads';
 
     protected $fillable = [
@@ -26,5 +28,9 @@ class Ad extends Model
 
     public function playlist_to_ad() {
         return $this->hasMany(PlaylistToAd::class, 'ad_id');
+    }
+
+    public function playlist() {
+        return $this->belongsToMany(Playlist::class, 'playlist_to_ad')->using(PlaylistToAd::class);
     }
 }
