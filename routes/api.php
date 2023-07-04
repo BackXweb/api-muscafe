@@ -96,5 +96,6 @@ Route::prefix('/player')->controller(PlayerController::class)->group(function ()
 });
 
 Route::prefix('/player')->middleware(['auth:sanctum', 'abilities:player'])->controller(StatisticController::class)->group(function () {
+    Route::get('/', 'index');
     Route::post('/store', 'store');
 });
