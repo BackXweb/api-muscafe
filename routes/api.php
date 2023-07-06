@@ -101,4 +101,5 @@ Route::prefix('/statistic')->middleware(['auth:sanctum', 'abilities:player'])->c
 
 Route::prefix('/statistic')->middleware(['auth:sanctum', 'abilities:user'])->controller(StatisticController::class)->group(function () {
     Route::get('/', 'index');
+    Route::get('/export', 'export');
 });

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StatisticExport;
 use App\Http\Requests\Statistic\StoreRequest;
 use App\Models\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 
 class StatisticController extends Controller
 {
@@ -26,5 +29,15 @@ class StatisticController extends Controller
         Statistic::create($validated);
 
         return $this->outputData(['without_data' => 'Music added in statistic successfully']);
+    }
+
+    public function export(Request $request) {
+        if ($request->file_format == 'excel') {
+            return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        } elseif ($request->file_format == 'pdf') {
+            return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        } else {
+            return $this->outputData(['without_data' => 'Param file_format must by only excel or pdf']);
+        }
     }
 }
