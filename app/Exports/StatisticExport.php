@@ -33,7 +33,7 @@ class StatisticExport implements FromCollection, WithMapping, WithHeadings
         return [
             $invoice->id,
             $invoice->storage_music,
-            $invoice->is_ad ? 'Музыка' : 'Реклама',
+            $invoice->is_ad ? 'Реклама' : 'Музыка',
             date('d.m.Y H:i:s', strtotime($invoice->created_at))
         ];
     }
