@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Ad;
 use App\Models\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -46,6 +47,19 @@ class StatisticExport implements FromCollection, WithMapping, WithHeadings
             $statistics->where('is_ad', $this->request->is_ad);
         }
 
-        return $statistics->orderBy('created_at', 'asc')->get();
+        $statistics = $statistics->orderBy('created_at', 'asc')->get();
+
+        foreach ($statistics as $key => $item) {
+            if ($item['is_ad']) {
+                $temp_arr = explode('/', $item['storage_music']);
+                $name = Ad::where('storage', 'LIKE', '%' . end($temp_arr))->where('user_id', $temp_arr[count($temp_arr) - 2])->first();
+
+                if ($name) {
+                    $statistics[$key]['storage_music'] = $name->name;
+                }
+            }
+        }
+
+        return $statistics;
     }
 }
