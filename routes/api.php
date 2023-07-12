@@ -77,6 +77,7 @@ Route::prefix('/playlist')->middleware(['auth:sanctum', 'abilities:user'])->cont
 Route::prefix('/style')->middleware(['auth:sanctum', 'abilities:user'])->controller(StyleController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/show', 'show');
+    Route::get('/show-substyle', 'show_substyle');
 });
 
 Route::prefix('/ad')->middleware(['auth:sanctum', 'abilities:user'])->controller(AdController::class)->group(function () {
