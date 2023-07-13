@@ -45,6 +45,6 @@ class Controller extends BaseController
     }
 
     protected function storageUrlToPath($url) {
-        return str_replace('/storage', '/public', $url);
+        return str_replace('/storage', 'public', $url);
     }
 }
