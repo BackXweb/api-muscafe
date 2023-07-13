@@ -202,7 +202,10 @@ class UserController extends Controller
         })->first();
 
         if ($user) {
-            $user->facilities()->tokens()->delete();
+            foreach ($user->facilities() as $facility) {
+                $facility->tokens()->delete();
+            }
+
             $user->tokens()->delete();
             $user->delete();
 
