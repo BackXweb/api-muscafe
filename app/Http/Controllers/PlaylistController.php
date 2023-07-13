@@ -27,8 +27,20 @@ class PlaylistController extends Controller
 
         if ($playlist) {
             foreach (PlaylistToStyle::where('playlist_id', $playlist->id)->get() as $key => $style) {
-                if (Storage::exists($this->storageUrlToPath($style->storage_style))) {
+                $storage_style = $this->storageUrlToPath($style->storage_style);
+
+                if (Storage::exists($storage_style)) {
                     $styles[$key]['style'] = $style;
+
+                    if (Storage::exists($storage_style. '/config.json')) {
+                        $style_content = json_decode(Storage::get($storage_style . '/config.json'));
+
+                        $styles[$key]['style'] = [
+                            'name' => $style_content->name,
+                            'description' => $style_content->description,
+                            'image' => Storage::url($storage_style . '/' . $style_content->image),
+                        ];
+                    }
 
                     foreach (Storage::files($this->storageUrlToPath($style->storage_style) . '/music') as $music) {
                         $styles[$key]['musics'][] = Storage::url($music);
