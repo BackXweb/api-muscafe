@@ -93,6 +93,7 @@ Route::prefix('/player')->controller(PlayerController::class)->group(function ()
 
     Route::middleware(['auth:sanctum', 'abilities:player'])->group(function () {
         Route::get('/show', 'show');
+        Route::get('/get-facility', 'get_facility');
     });
 });
 

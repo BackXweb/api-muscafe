@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Facility;
 use App\Models\Playlist;
 use App\Models\PlaylistToStyle;
 use Illuminate\Http\Request;
@@ -58,5 +59,10 @@ class PlayerController extends Controller
         } else {
             return response()->json(['message' => 'Token not found', 'data' => false], 401);
         }
+    }
+
+    public function get_facility(Request $request)
+    {
+        return $this->outputData(['with_data' => 'Facility data'], Facility::where('id', $request->user()->id)->first());
     }
 }
