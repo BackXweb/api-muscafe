@@ -26,7 +26,7 @@ class UserController extends Controller
             if (($user->status && ($user->role->name === 'manager' || empty($user->subscribe_end))) || ($user->status && $user->subscribe_end > date('Y-m-d'))) {
                 return $this->outputData(
                     ['with_data' => 'Login successfully'],
-                    ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'role' => $user->role->name, 'name' => $user->name]
+                    ['token' => $user->createToken($user->login, explode('.', $user->role->name))->plainTextToken, 'id' => $user->id, 'role' => $user->role->name, 'name' => $user->name]
                 );
             } else {
                 return $this->outputError('Login denied', 403);
