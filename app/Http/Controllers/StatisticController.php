@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\Statistic\ExcelExport;
+use App\Exports\StatisticExport;
 use App\Exports\Statistic\PdfExport;
 use App\Http\Requests\Statistic\StoreRequest;
 use App\Models\Statistic;
@@ -33,9 +33,9 @@ class StatisticController extends Controller
 
     public function export(Request $request) {
         if ($request->file_format == 'excel') {
-            return Excel::download(new ExcelExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+            return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         } elseif ($request->file_format == 'pdf') {
-            return Excel::download(new PdfExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.pdf', \Maatwebsite\Excel\Excel::MPDF);
+            return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.pdf', \Maatwebsite\Excel\Excel::MPDF);
         } else {
             return $this->outputData(['without_data' => 'Param file_format must by only excel or pdf']);
         }
