@@ -36,6 +36,8 @@ class StatisticController extends Controller
             return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         } elseif ($request->file_format == 'pdf') {
             return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.pdf', \Maatwebsite\Excel\Excel::MPDF);
+        } elseif ($request->file_format == 'csv') {
+            return Excel::download(new StatisticExport($request), 'statistic_' . date('d.m.Y_H:i:s') . '.csv', \Maatwebsite\Excel\Excel::CSV);
         } else {
             return $this->outputData(['without_data' => 'Param file_format must by only excel or pdf']);
         }
