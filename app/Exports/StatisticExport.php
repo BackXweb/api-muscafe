@@ -63,7 +63,7 @@ class StatisticExport implements FromCollection, WithMapping, WithHeadings
                     $statistics[$key]['music'] = $name->name;
                 }
             } else {
-                $temp_arr = explode('/', str_replace(['/storage/music/', 'music/'], ['', ''], $item['storage_music']));
+                $temp_arr = explode('/', str_replace(['/storage/music/', '/music/'], ['', '/'], $item['storage_music']));
 
                 foreach ($temp_arr as $key_music => $item_music) {
                     switch ($key_music) {
