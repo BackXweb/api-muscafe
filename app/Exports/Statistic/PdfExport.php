@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Statistic;
 
 use App\Models\Ad;
 use App\Models\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class StatisticExport implements FromCollection, WithMapping, WithHeadings
+class PdfExport implements FromView
 {
     protected Request $request;
 
@@ -20,31 +18,14 @@ class StatisticExport implements FromCollection, WithMapping, WithHeadings
         $this->request = $request;
     }
 
-    public function headings(): array
+    public function view(): \Illuminate\Contracts\View\View
     {
-        return [
-            '#',
-            'Стиль музыки',
-            'Подстиль музыки',
-            'Название',
-            'Музыка/Реклама',
-            'Дата добавления',
-        ];
+        return view('statistic.pdf', [
+            'statistics' => $this->getStatistic()
+        ]);
     }
 
-    public function map($invoice): array
-    {
-        return [
-            $invoice->id,
-            $invoice->style,
-            $invoice->substyle,
-            $invoice->music,
-            $invoice->is_ad ? 'Реклама' : 'Музыка',
-            date('d.m.Y H:i:s', strtotime($invoice->created_at))
-        ];
-    }
-
-    public function collection()
+    public function getStatistic()
     {
         $statistics = Statistic::where('facility_id', $this->request->id)->whereDate('created_at', '>=', date('Y-m-d H:i:s', strtotime(request('date_start', Carbon::today()))))->whereDate('created_at', '<=', date('Y-m-d H:i:s', strtotime(request('date_end', Carbon::tomorrow()))));
 
@@ -63,7 +44,7 @@ class StatisticExport implements FromCollection, WithMapping, WithHeadings
                     $statistics[$key]['music'] = $name->name;
                 }
             } else {
-                $temp_arr = explode('/', str_replace(['/storage/music/', 'music/'], ['', ''], $item['storage_music']));
+                $temp_arr = explode('/', str_replace(['/storage/music/', '/music/'], ['', '/'], $item['storage_music']));
 
                 foreach ($temp_arr as $key_music => $item_music) {
                     switch ($key_music) {
