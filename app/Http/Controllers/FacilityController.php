@@ -14,7 +14,7 @@ class FacilityController extends Controller
     {
         return $this->outputPaginationData(
             ['with_data' => 'Facilities found successfully', 'without_data' => 'Facilities not found'],
-            Facility::where('user_id', $request->user()->id)->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
+            Facility::where('user_id', $request->user()->id)->where('name', 'LIKE', '%' . request('name') . '%')->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
         );
     }
 
