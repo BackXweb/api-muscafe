@@ -12,9 +12,17 @@ class FacilityController extends Controller
 {
     public function index(Request $request)
     {
+        $query = Facility::where('user_id', $request->user()->id)->where('name', 'LIKE', '%' . request('name') . '%');
+
+        if (!empty($request->playlist_id)) {
+            $query->where('playlist_id', $request->playlist_id);
+        }
+
+        $query->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc');
+
         return $this->outputPaginationData(
             ['with_data' => 'Facilities found successfully', 'without_data' => 'Facilities not found'],
-            Facility::where('user_id', $request->user()->id)->where('name', 'LIKE', '%' . request('name') . '%')->orderBy(request('sort', 'created_at'), request('order', 'desc'))->orderBy('id', 'desc')->paginate((int)$request->per_page)
+            $query->paginate((int)$request->per_page)
         );
     }
 
